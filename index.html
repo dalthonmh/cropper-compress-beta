@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<title>cropper-compress</title>
 	<!-- styles -->
 	<!-- cropperjs -->
@@ -10,10 +11,10 @@
 	<link rel="stylesheet" href="css/cropper-compress.css">
 </head>
 <body>
-	<h2>cropper-compress</h2>
 	<div class="container">
+		<h2 style="text-align: center;">cropper-compress</h2>
 		<div id="containerImage">
-			<img id="image" src="" crossorigin="anonymous">
+			<img id="source_image" src="" crossorigin="anonymous">
 		</div>
 		<form action="">
 			<input type="file" id="inputImage" accept="image/*" />
@@ -24,6 +25,7 @@
 					<button type="button" data-method="reset" id="btnReset">Resetear</button>
 					<button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
 					<button type="button" data-method="upload" id="btnUpload">Subir</button>
+					<button type="button" data-method="download" id="btnDownload">Descargar imagen</button>
 				</fieldset>
 				<fieldset class="docs-toggles">
 					<legend>Tipo de recorte</legend>
@@ -40,6 +42,13 @@
 						<span>Circular</span>
 					</label>
 				</fieldset>
+
+				<fieldset>
+			        <legend>Calidad de imagen</legend>
+			        <h5 style="display: inline;">Calidad</h5>
+			        <input type="number" min="1" max="100" step="1" value="70" id="jpeg_encode_quality" style="width: 60px;">
+			        <input type="range" id="input-range" value="70" min="1" max="100">
+		      	</fieldset>
 
 				<div class="advanced">
 					<div class="table">
