@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>cropper-compress</title>
+	<!-- styles -->
+	<!-- cropperjs -->
+	<link rel="stylesheet" href="pluggins/cropper.min.css">
+	<!-- cropper-compress -->
+	<link rel="stylesheet" href="css/cropper-compress.css">
+</head>
+<body>
+	<h2>cropper-compress</h2>
+	<div class="container">
+		<div id="containerImage">
+			<img id="image" src="" crossorigin="anonymous">
+		</div>
+		<form action="">
+			<input type="file" id="inputImage" accept="image/*" />
+			<div id="actions">
+				<fieldset class="docs-buttons">
+					<legend>Opciones</legend>
+					<button type="button" data-method="save" id="btnSave">Guardar</button>
+					<button type="button" data-method="reset" id="btnReset">Resetear</button>
+					<button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
+					<button type="button" data-method="upload" id="btnUpload">Subir</button>
+				</fieldset>
+				<fieldset class="docs-toggles">
+					<legend>Tipo de recorte</legend>
+					<label>
+						<input type="radio" data-method="rectangle" name="clippingType">
+						<span>Rectangular</span>
+					</label>
+					<label>
+						<input type="radio" data-method="cuadrado" name="clippingType">
+						<span>Cuadrado</span>
+					</label>
+					<label>
+						<input type="radio" data-method="circle" name="clippingType">
+						<span>Circular</span>
+					</label>
+				</fieldset>
+
+				<div class="advanced">
+					<div class="table">
+						<caption>Opciones avanzadas</caption>
+						<table>
+							<thead>
+								<tr>
+									<th>Característica</th>
+									<th>Valor</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Peso inicial</td>
+									<td>nature-3082832_1920.jpg</td>
+								</tr>
+								<tr>
+									<td>Peso final</td>
+									<td>image/jpeg</td>
+								</tr>
+								<tr>
+									<td>% Peso reducido</td>
+									<td>50%</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!-- scripts -->
+	<!-- cropper.js -->
+	<script src="pluggins/cropper.min.js"></script>
+	<!-- JIC.js -->
+	<script src="pluggins/JIC.min.js"></script>
+	<!-- cropper-compress.js -->
+	<script src="js/cropper-compress.js"></script>
+</body>
+</html>
