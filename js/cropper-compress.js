@@ -2,23 +2,24 @@ window.onload = function(){
 	'use strict';
 
 	// global variables
-	var URL = window.URL || window.webkitURL;
+  var containerImage = document.getElementById('containerImage');
 	var source_image = document.getElementById('source_image');
-	var containerImage = document.getElementById('containerImage');
+  var URL = window.URL || window.webkitURL;
+  var arrayImages;
 	var options;
-	var arrayImages;
 
+  var uploadedImageName = 'cropped.jpg';
 	var uploadedImageType = 'image/jpeg';
-  	var uploadedImageName = 'cropped.jpg';
 
 	// Initialize options
 	options = {
 		viewMode: 1,
 		aspectRatio: NaN,
 		ready: function (event) {
-			cropper.setDragMode();
-			cropper.clear();
-		}
+  			cropper.setDragMode();
+  			cropper.clear();
+        console.log(showImageLive());
+  		}
   	};
   	arrayImages = [source_image];
 
@@ -28,17 +29,22 @@ window.onload = function(){
   		inputImage.onchange = function(){
   			let files = this.files;
   			let file;
+        let pesoInicial = document.getElementById('pesoInicial');
 
   			if (cropper && files && files.length) {
   				file = files[0];
+          pesoInicial.innerHTML = (parseInt(file.size) / 1024).toFixed(3) + " Kb";
   				if (/^image\/\w+/.test(file.type)) {
   					uploadedImageType = file.type;
           			uploadedImageName = file.name;
   					if (uploadedImageURL) {
 	          			URL.revokeObjectURL(uploadedImageURL);
 	          		}
+                
 	          		source_image.src = uploadedImageURL = URL.createObjectURL(file);
+                
 	          		cropper.destroy();
+
 	          		cropper = new Cropper(source_image, options);
 	          		inputImage.value = null;
   				} else {
@@ -51,14 +57,77 @@ window.onload = function(){
   		inputImage.parentNode.className += ' disabled';
   	};
 
+  // Inicialización JIC
+  var inputNumberCalidad = document.getElementById('inputNumberCalidad');
+  var inputRangeCalidad = document.getElementById('inputRangeCalidad');
+  var output_format = 'jpg';
+
+  // input range change
+  inputNumberCalidad.value = inputRangeCalidad.value;
+  inputRangeCalidad.addEventListener("change", function(){
+      inputNumberCalidad.value = this.value;
+  });
+
+  // change value in edditing
+  inputNumberCalidad.addEventListener("input", function () {
+    inputRangeCalidad.value = this.value;
+  });
+
+  inputNumberCalidad.onchange = function(){
+      let max = parseInt(this.getAttribute("max"));
+      let min = parseInt(this.getAttribute("min"));
+      if (this.value > max) {
+          this.value = max;
+      }
+      else if (this.value < min) {
+          this.value = min;
+      }
+  };
+
+  // Vanilla JS jic function when input range change
+  inputRangeCalidad.onchange = function(){
+      imageCompress();
+      
+  }
+
+  inputNumberCalidad.addEventListener('input', function(){
+      imageCompress();
+  });
+
+  function imageCompress() {
+      if (source_image.src == "") {
+          alert("Debes subir una imagen antes");
+          return false;
+      }
+
+      let quality = parseInt(inputNumberCalidad.value);
+      source_image.src = jic.compress(source_image,quality,output_format).src;
+
+      return source_image;
+
+      // src es formato base64
+      let src = source_image.src;
+      let base64str = src.substr(23);
+      let decoded = atob(base64str);
+
+      let fileSizeCompressed = parseFloat(decoded.length.toLocaleString());
+      let FilesizeFormated = fileSizeCompressed + " Kb";
+      let qualityFormated = quality + " %";
+
+      console.log("Nuevo tamaño:" + FilesizeFormated);
+      console.log("% Reducción:" + qualityFormated);
+
+  };
+
+
 	// new cropper
 	var cropper = new Cropper(source_image, options);
+  var uploadedImageName = 'cropped.jpg';
 	var uploadedImageType = 'image/jpeg';
-  	var uploadedImageName = 'cropped.jpg';
 	var uploadedImageURL;
 	var cen;
 
-	// Opciones
+	// Opciones cropper
 	var actions = document.getElementById('actions');
 	actions.querySelector('.docs-toggles').onchange = function(event){
 		var e = event || window.event;
@@ -87,13 +156,14 @@ window.onload = function(){
       	}
       	options.ready = function(){
       		if (cen) viewCircle();
+          console.log(showImageLive());
       	};
       	// Restart
       	cropper.destroy();
       	return cropper = new Cropper(arrayImages[arrayImages.length-1], options);
 	}
 
-	// Methods
+	// Methods cropper
 	actions.querySelector('.docs-buttons').onclick = function (event){
 		var e = event || window.event;
       	var target = e.target || e.srcElement;
@@ -116,7 +186,7 @@ window.onload = function(){
       			resetRadio();
       			break;
       		case 'upload':
-      			console.log('subido al servido');
+      			console.log('subido al servidor');
       			break;
 
       		case 'download':
@@ -137,6 +207,21 @@ window.onload = function(){
 		@Funciones generales
 	*/
 
+  // mostrar imagen
+  function showImageLive(){
+    var imgShow = document.getElementsByClassName('cropper-hide');
+    // imgShow[0].src = source_image.src;
+    // console.log(imgShow);
+    return imgShow[0];
+  }
+
+  // muestra datos en tabla actualizada
+  function showDataUpdated(){
+    let pesoFinal = document.getElementById('pesoFinal');
+    let pesoReducido = document.getElementById('pesoReducido');
+
+  }
+
 	// mostrar visor circular
     function viewCircle(){
     	document.querySelector('.cropper-view-box').className += " cropper-circle";
@@ -151,7 +236,7 @@ window.onload = function(){
     	rectangleImage.id = 'image';
     	containerImage.innerHTML = '';
     	containerImage.appendChild(rectangleImage);
-    	arrayImages.push(rectangleImage);
+    	arrayImages.push(rectangleImage); // nueva imagen recibida
     	return cropper = new Cropper(arrayImages[arrayImages.length-1], {
     		viewMode: 1,
     		ready: function (event) {
@@ -183,6 +268,4 @@ window.onload = function(){
     		inputRadio[i].checked = false;
     	}
     };
-
-
 }

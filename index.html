@@ -19,14 +19,7 @@
 		<form action="">
 			<input type="file" id="inputImage" accept="image/*" />
 			<div id="actions">
-				<fieldset class="docs-buttons">
-					<legend>Opciones</legend>
-					<button type="button" data-method="save" id="btnSave">Guardar</button>
-					<button type="button" data-method="reset" id="btnReset">Resetear</button>
-					<button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
-					<button type="button" data-method="upload" id="btnUpload">Subir</button>
-					<button type="button" data-method="download" id="btnDownload">Descargar imagen</button>
-				</fieldset>
+
 				<fieldset class="docs-toggles">
 					<legend>Tipo de recorte</legend>
 					<label>
@@ -43,11 +36,28 @@
 					</label>
 				</fieldset>
 
+				<fieldset class="docs-buttons">
+					<legend>Opciones</legend>
+					<button type="button" data-method="save" id="btnSave">Guardar</button>
+					<button type="button" data-method="reset" id="btnReset">Resetear</button>
+					<button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
+					<button type="button" data-method="upload" id="btnUpload">Subir</button>
+					<button type="button" data-method="download" id="btnDownload">Descargar imagen</button>
+				</fieldset>
+				
+				<fieldset>
+					<legend>Activar opciones avanzadas</legend>
+					<label>
+						<input type="checkbox" id="activeAdvanced">
+						<span>Activar</span>
+					</label>
+				</fieldset>
+
 				<fieldset>
 			        <legend>Calidad de imagen</legend>
 			        <h5 style="display: inline;">Calidad</h5>
-			        <input type="number" min="1" max="100" step="1" value="70" id="jpeg_encode_quality" style="width: 60px;">
-			        <input type="range" id="input-range" value="70" min="1" max="100">
+			        <input type="number" id="inputNumberCalidad" min="1" max="100" value="70" step="1" style="width: 60px;">
+			        <input type="range" id="inputRangeCalidad"  min="1" max="100"value="70">
 		      	</fieldset>
 
 				<div class="advanced">
@@ -63,15 +73,15 @@
 							<tbody>
 								<tr>
 									<td>Peso inicial</td>
-									<td>nature-3082832_1920.jpg</td>
+									<td id="pesoInicial">nature-3082832_1920.jpg</td>
 								</tr>
 								<tr>
 									<td>Peso final</td>
-									<td>image/jpeg</td>
+									<td id="pesoFinal">image/jpeg</td>
 								</tr>
 								<tr>
 									<td>% Peso reducido</td>
-									<td>50%</td>
+									<td id="porcentajeReduccion">50%</td>
 								</tr>
 							</tbody>
 						</table>
