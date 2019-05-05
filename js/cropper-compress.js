@@ -7,6 +7,8 @@ window.onload = function(){
   var URL = window.URL || window.webkitURL;
   var arrayImages;
 	var options;
+  var sizeFinal; // muesta valor final del peso
+  var qualityFinal; // muesta valor final del peso
 
   var uploadedImageName = 'cropped.jpg';
 	var uploadedImageType = 'image/jpeg';
@@ -27,9 +29,10 @@ window.onload = function(){
   	var inputImage = document.querySelector('#inputImage');
   	if (URL) {
   		inputImage.onchange = function(){
+        let pesoInicial = document.getElementById('pesoInicial');
   			let files = this.files;
   			let file;
-        let pesoInicial = document.getElementById('pesoInicial');
+        let reader = new FileReader();
 
   			if (cropper && files && files.length) {
   				file = files[0];
@@ -40,11 +43,20 @@ window.onload = function(){
   					if (uploadedImageURL) {
 	          			URL.revokeObjectURL(uploadedImageURL);
 	          		}
-                // console.log(file);
-                // let soImage = imageCompress(file);
-                // console.log(soImage);
-	          		source_image.src = uploadedImageURL = URL.createObjectURL(file);
-                // console.log(uploadedImageURL);
+	          		uploadedImageURL = URL.createObjectURL(file);
+
+                reader.onload = function(){
+                  source_image.src = reader.result;
+                  // console.log(source_image);
+
+                }
+                if (file) {
+                  reader.readAsDataURL(file);
+                }else{
+                  source_image.src = "";
+                }
+
+                source_image.src = uploadedImageURL; // esto muestra la imagen
 	          		cropper.destroy();
 
 	          		cropper = new Cropper(source_image, options);
@@ -74,14 +86,13 @@ window.onload = function(){
   activeAdvanced.onclick = function (){
 
     let cen = activeAdvanced.checked; // guarda si esta checked o no
-
-    if (cen) {
-      console.log('checked');
-
-    }
-    console.log(cen);
     let advanced = document.querySelector('.advanced');
     advanced.classList.toggle("d-none");
+
+    if (cen) {
+      document.querySelector('#pesoFinal').innerHTML = sizeFinal + " Kb";
+      document.querySelector('#quality').innerHTML = qualityFinal + " %";
+    }
   }
   
   // Inicialización JIC
@@ -120,32 +131,6 @@ window.onload = function(){
   inputNumberCalidad.addEventListener('input', function(){
       imageCompress();
   });
-
-  function imageCompress(image) {
-
-      if (image.src == "") {
-          alert("Debes subir una imagen antes");
-          return false;
-      }
-
-      let quality = parseInt(inputNumberCalidad.value);
-      image.src = jic.compress(image,quality,output_format).src;
-
-      return image;
-
-      // src es formato base64
-      // let src = image.src;
-      // let base64str = src.substr(23);
-      // let decoded = atob(base64str);
-
-      // let fileSizeCompressed = parseFloat(decoded.length.toLocaleString());
-      // let FilesizeFormated = fileSizeCompressed + " Kb";
-      // let qualityFormated = quality + " %";
-
-      // console.log("Nuevo tamaño:" + FilesizeFormated);
-      // console.log("% Reducción:" + qualityFormated);
-
-  };
 
 
 	// Opciones cropper
@@ -216,15 +201,14 @@ window.onload = function(){
             let btnUpload = document.getElementById('btnUpload');
             btnUpload.setAttribute("download", "descarga.jpeg");
             btnUpload.setAttribute("href", data);
-            // let a = document.createElement('a');
-            // a.setAttribute("download", "descarga.jpeg");
-            // a.setAttribute("href", data);
-            // a.appendChild(img);
 
       			break;
 
       		case 'download':
       			console.log('Imagen descargada');
+            sizeFinal = imageCompress(source_image).size;
+            qualityFinal = imageCompress(source_image).quality;
+
       			break;
       		case 'reset':
       			console.log('pluggin reseteado');
@@ -241,11 +225,34 @@ window.onload = function(){
 		@Funciones generales
 	*/
 
+  // funcion compresion de imagen
+  function imageCompress(image) {
+
+      if (image.src == "") {
+          alert("Debes subir una imagen antes");
+          return false;
+      }
+
+      let quality = parseInt(inputNumberCalidad.value);
+      image.src = jic.compress(image,quality,output_format).src;
+
+      let src = image.src;
+      let base64str = src.substr(23);
+      let decoded = atob(base64str);
+
+      let fileSizeCompressed = parseFloat(decoded.length.toLocaleString());
+
+      return {
+        img: image,
+        size: fileSizeCompressed,
+        quality: quality
+      };
+
+  };
+
   // mostrar imagen
   function getImageLive(){
     var imgShow = document.getElementsByClassName('cropper-hide');
-    // imgShow[0].src = source_image.src;
-    // console.log(imgShow);
     return imgShow[0];
   }
 
