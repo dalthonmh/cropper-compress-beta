@@ -25,3 +25,6 @@ table, th, td {
 .cropper-circle {
   border-radius: 50% !important;
 }
+.d-none{
+  display: none;
+}

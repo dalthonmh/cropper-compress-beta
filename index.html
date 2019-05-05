@@ -14,7 +14,8 @@
 	<div class="container">
 		<h2 style="text-align: center;">cropper-compress</h2>
 		<div id="containerImage">
-			<img id="source_image" src="" crossorigin="anonymous">
+			<img id="source_image" crossorigin="anonymous" src="">
+			<img id="result_image" style="display: none;" crossorigin="anonymous" src="">
 		</div>
 		<form action="">
 			<input type="file" id="inputImage" accept="image/*" />
@@ -41,7 +42,7 @@
 					<button type="button" data-method="save" id="btnSave">Guardar</button>
 					<button type="button" data-method="reset" id="btnReset">Resetear</button>
 					<button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
-					<button type="button" data-method="upload" id="btnUpload">Subir</button>
+					<a type="button" data-method="upload" id="btnUpload">Subir</a>
 					<button type="button" data-method="download" id="btnDownload">Descargar imagen</button>
 				</fieldset>
 				
@@ -53,14 +54,14 @@
 					</label>
 				</fieldset>
 
-				<fieldset>
+				<fieldset class="advanced d-none">
 			        <legend>Calidad de imagen</legend>
 			        <h5 style="display: inline;">Calidad</h5>
 			        <input type="number" id="inputNumberCalidad" min="1" max="100" value="70" step="1" style="width: 60px;">
 			        <input type="range" id="inputRangeCalidad"  min="1" max="100"value="70">
-		      	</fieldset>
+					
+					<br><br>
 
-				<div class="advanced">
 					<div class="table">
 						<caption>Opciones avanzadas</caption>
 						<table>
@@ -86,7 +87,7 @@
 							</tbody>
 						</table>
 					</div>
-				</div>
+				</fieldset>
 			</div>
 		</form>
 	</div>
