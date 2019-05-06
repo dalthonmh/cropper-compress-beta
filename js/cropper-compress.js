@@ -80,10 +80,14 @@ window.onload = function(){
   var cen;
 
   /**
-  * Funcionalidades
+  * Funcionalidades checkbox 
   */
 
   var activeAdvanced = document.getElementById('activeAdvanced');
+  activeAdvanced.addEventListener("click", function (){
+    result_image.src = middleImage;
+  });
+  // again click
   activeAdvanced.onclick = function (){
 
     let cen = activeAdvanced.checked; // guarda si esta checked o no
@@ -91,8 +95,10 @@ window.onload = function(){
     advanced.classList.toggle("d-none");
 
     if (cen) {
-      document.querySelector('#pesoFinal').innerHTML = sizeFinal + " Kb";
-      document.querySelector('#quality').innerHTML = qualityFinal + " %";
+      result_image.src = middleImage;
+      let image = imageCompress(result_image);
+      document.querySelector('#pesoFinal').innerHTML = image.size + " Kb";
+      document.querySelector('#quality').innerHTML = image.quality + " %";
     }
   }
   
@@ -217,10 +223,10 @@ window.onload = function(){
       	}
 	}
 
-document.querySelector('#btnUpload').addEventListener('click', function(){
-  result_image.src = middleImage;
-});
-
+  var btnUpload = document.querySelector('#btnUpload');
+  btnUpload.addEventListener("click", function (){
+    result_image.src = middleImage;
+  });
 	/**
 		@Funciones generales
 	*/
