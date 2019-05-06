@@ -28,3 +28,16 @@ table, th, td {
 .d-none{
   display: none;
 }
+/*mostrando opciones solo cuando es crop*/
+.docs-buttons #btnDownload{
+    display: none; /* aun no funcional */
+    padding: 1px 6px;
+    background-color: buttonface;
+    border: 1px solid rgb(221, 221, 221);
+    border-width: 2px;      
+    font: 400 13.3333px Arial;
+    cursor: pointer;
+}
+.docs-buttons #btnReset{
+  display: none;
+}

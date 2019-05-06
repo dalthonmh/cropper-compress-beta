@@ -11,6 +11,24 @@ window.onload = function(){
   var image_compressed;
   var middleImage; // esta tiene la imagen para ser procesada
 
+  /** 
+  * variables para interfaz
+  */
+
+  var btnSave = document.getElementById('btnSave');
+  var btnReset = document.getElementById('btnReset');
+  var btnCancel = document.getElementById('btnCancel');
+  var btnUpload = document.getElementById('btnUpload');
+  var btnDownload = document.getElementById('btnDownload');
+  var inputImage = document.getElementById('inputImage');
+  var docs_advanced = document.querySelector('.docs-advanced');
+  var docs_buttons = document.querySelector('.docs-buttons');
+  var docs_toggles = document.querySelector('.docs-toggles');
+
+  docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
+  // fin variables para interfaz
+
+
   var uploadedImageName = 'cropped.jpg';
 	var uploadedImageType = 'image/jpeg';
 
@@ -49,7 +67,10 @@ window.onload = function(){
                 reader.onloadend = function(){
                   middleImage = reader.result;
                   // console.log(middleImage);
-
+                  /* interfaz */
+                    docs_advanced.style.display = docs_toggles.style.display = docs_buttons.style.display = 'block';
+                    // btnSave.style.display = 'none';
+                    // btnReset.style.display = 'none';
                 }
                 if (file) {
                   reader.readAsDataURL(file);
@@ -95,8 +116,10 @@ window.onload = function(){
     advanced.classList.toggle("d-none");
     var pesoFinal = document.querySelector('#pesoFinal');
     var quality = document.querySelector('#quality');
+    var activeAdvancedMessage = document.querySelector('#activeAdvancedMessage');
 
     if (cen) {
+      activeAdvancedMessage.innerHTML = 'Listo';      
       result_image.src = middleImage;
       var image = imageCompress(result_image);
       pesoFinal.innerHTML = image.size + " Kb";
@@ -107,15 +130,17 @@ window.onload = function(){
           image = imageCompress(result_image);
           pesoFinal.innerHTML = image.size + " Kb";
           quality.innerHTML = image.quality + " %";
+          setImageLive(image.src);
       }
 
       inputNumberCalidad.addEventListener('input', function(){
           image = imageCompress(result_image);
           pesoFinal.innerHTML = image.size + " Kb";
           quality.innerHTML = image.quality + " %";
+          setImageLive(image.src);
       });
-
-
+    }else{
+      activeAdvancedMessage.innerHTML = 'Activar';
     }
   }
   
@@ -157,10 +182,14 @@ window.onload = function(){
       		method: target.getAttribute('data-method')
       	}
       	switch (data.method) {
-      		case 'rectangle':
-      			options['aspectRatio'] = 16 / 9;
+      		case 'libre':
+      			options['aspectRatio'] = NaN;
       			cen = false;
       			break;
+          case 'rectangle':
+            options['aspectRatio'] = 16 / 9;
+            cen = false;
+            break;
       		case 'cuadrado':
       			options['aspectRatio'] = 1 / 1;
       			cen = false;
@@ -268,9 +297,9 @@ window.onload = function(){
     return imgShow[0];
   }
 
-  function setImageLive(image){
+  function setImageLive(imageSrc){
     let imgShow = document.getElementsByClassName('cropper-hide');
-    imgShow = image;
+    imgShow[0].src = imageSrc;
   }
 	// mostrar visor circular
     function viewCircle(){
@@ -318,4 +347,30 @@ window.onload = function(){
     		inputRadio[i].checked = false;
     	}
     };
+  // mainInterfaz();
 }
+
+/**
+* Interacciones de la interfaz
+*
+// */
+// function mainInterfaz(){
+
+//   var btnSave = document.getElementById('btnSave');
+//   var btnReset = document.getElementById('btnReset');
+//   var btnCancel = document.getElementById('btnCancel');
+//   var btnUpload = document.getElementById('btnUpload');
+//   var btnDownload = document.getElementById('btnDownload');
+//   var inputImage = document.getElementById('inputImage');
+
+//   // inicializacion de valores
+//   var docs_advanced = document.querySelector('.docs-advanced');
+//   var docs_buttons = document.querySelector('.docs-buttons');
+//   var docs_toggles = document.querySelector('.docs-toggles');
+//   docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
+
+
+// }
+
+
+

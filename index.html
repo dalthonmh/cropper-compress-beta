@@ -24,6 +24,10 @@
 				<fieldset class="docs-toggles">
 					<legend>Tipo de recorte</legend>
 					<label>
+						<input type="radio" data-method="libre" name="clippingType">
+						<span>Libre</span>
+					</label>
+					<label>
 						<input type="radio" data-method="rectangle" name="clippingType">
 						<span>Rectangular</span>
 					</label>
@@ -46,11 +50,11 @@
 					<a type="button" data-method="download" id="btnDownload">Descargar imagen</a>
 				</fieldset>
 				
-				<fieldset>
+				<fieldset class="docs-advanced">
 					<legend>Activar opciones avanzadas</legend>
 					<label>
 						<input type="checkbox" id="activeAdvanced">
-						<span>Activar</span>
+						<span id="activeAdvancedMessage">Activar</span>
 					</label>
 				</fieldset>
 
