@@ -4,11 +4,12 @@ window.onload = function(){
 	// global variables
   var containerImage = document.getElementById('containerImage');
 	var source_image = document.getElementById('source_image');
+  var result_image = document.getElementById('result_image');
   var URL = window.URL || window.webkitURL;
   var arrayImages;
 	var options;
-  var sizeFinal; // muesta valor final del peso
-  var qualityFinal; // muesta valor final del peso
+  var image_compressed;
+  var middleImage; // esta tiene la imagen para ser procesada
 
   var uploadedImageName = 'cropped.jpg';
 	var uploadedImageType = 'image/jpeg';
@@ -45,15 +46,15 @@ window.onload = function(){
 	          		}
 	          		uploadedImageURL = URL.createObjectURL(file);
 
-                reader.onload = function(){
-                  source_image.src = reader.result;
-                  // console.log(source_image);
+                reader.onloadend = function(){
+                  middleImage = reader.result;
+                  // console.log(middleImage);
 
                 }
                 if (file) {
                   reader.readAsDataURL(file);
                 }else{
-                  source_image.src = "";
+                  // source_image.src = "";
                 }
 
                 source_image.src = uploadedImageURL; // esto muestra la imagen
@@ -194,21 +195,23 @@ window.onload = function(){
       			break;
       		case 'upload':
       			console.log('subido al servidor');
-            let img = getImageLive();
-            console.log(img);
-            let data = img.src;
-
-            let btnUpload = document.getElementById('btnUpload');
-            btnUpload.setAttribute("download", "descarga.jpeg");
-            btnUpload.setAttribute("href", data);
-
+            // result_image.src = "";
+            // console.log(result_image);
+            // console.log(result_image.src);
+            result_image.src = middleImage;
+            console.log(result_image);
+            // image_compressed = imageCompress(result_image);
+            // // axios sent to server
+            // console.log(image_compressed);
       			break;
 
       		case 'download':
       			console.log('Imagen descargada');
-            sizeFinal = imageCompress(source_image).size;
-            qualityFinal = imageCompress(source_image).quality;
-
+            let img = getImageLive();
+            let data = img.src;
+            let btnDownload = document.getElementById('btnDownload');
+            btnDownload.setAttribute("download", "descarga.jpeg");
+            btnDownload.setAttribute("href", data);
       			break;
       		case 'reset':
       			console.log('pluggin reseteado');
