@@ -194,18 +194,16 @@ window.onload = function(){
       			resetRadio();
       			break;
       		case 'upload':
-      			console.log('subido al servidor');
             result_image.src = middleImage;
-            console.log(result_image);
             var image = imageCompress(result_image);
             console.log(image);
-
+            data = image.src;
       			break;
 
       		case 'download':
       			console.log('Imagen descargada');
-            let img = getImageLive();
-            let data = img.src;
+            // let img = getImageLive();
+            // let data = img.src;
             let btnDownload = document.getElementById('btnDownload');
             btnDownload.setAttribute("download", "descarga.jpeg");
             btnDownload.setAttribute("href", data);
@@ -221,9 +219,6 @@ window.onload = function(){
 
 document.querySelector('#btnUpload').addEventListener('click', function(){
   result_image.src = middleImage;
-  console.log(result_image);
-  var image = imageCompress(result_image);
-  console.log(image);
 });
 
 	/**
