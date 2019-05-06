@@ -93,19 +93,36 @@ window.onload = function(){
     let cen = activeAdvanced.checked; // guarda si esta checked o no
     let advanced = document.querySelector('.advanced');
     advanced.classList.toggle("d-none");
+    var pesoFinal = document.querySelector('#pesoFinal');
+    var quality = document.querySelector('#quality');
 
     if (cen) {
       result_image.src = middleImage;
-      let image = imageCompress(result_image);
-      document.querySelector('#pesoFinal').innerHTML = image.size + " Kb";
-      document.querySelector('#quality').innerHTML = image.quality + " %";
+      var image = imageCompress(result_image);
+      pesoFinal.innerHTML = image.size + " Kb";
+      quality.innerHTML = image.quality + " %";
+
+      // Vanilla JS jic function when input range change
+      inputRangeCalidad.onchange = function(){
+          image = imageCompress(result_image);
+          pesoFinal.innerHTML = image.size + " Kb";
+          quality.innerHTML = image.quality + " %";
+      }
+
+      inputNumberCalidad.addEventListener('input', function(){
+          image = imageCompress(result_image);
+          pesoFinal.innerHTML = image.size + " Kb";
+          quality.innerHTML = image.quality + " %";
+      });
+
+
     }
   }
   
   // Inicialización JIC
   var inputNumberCalidad = document.getElementById('inputNumberCalidad');
   var inputRangeCalidad = document.getElementById('inputRangeCalidad');
-  var output_format = 'jpg';
+  var output_format = 'jpg'; // hay otros formatos
 
   // input range change
   inputNumberCalidad.value = inputRangeCalidad.value;
@@ -128,17 +145,6 @@ window.onload = function(){
           this.value = min;
       }
   };
-
-  // Vanilla JS jic function when input range change
-  inputRangeCalidad.onchange = function(){
-      imageCompress(getImageLive());
-      
-  }
-
-  inputNumberCalidad.addEventListener('input', function(){
-      imageCompress();
-  });
-
 
 	// Opciones cropper
 	var actions = document.getElementById('actions');
