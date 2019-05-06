@@ -195,14 +195,11 @@ window.onload = function(){
       			break;
       		case 'upload':
       			console.log('subido al servidor');
-            // result_image.src = "";
-            // console.log(result_image);
-            // console.log(result_image.src);
             result_image.src = middleImage;
             console.log(result_image);
-            // image_compressed = imageCompress(result_image);
-            // // axios sent to server
-            // console.log(image_compressed);
+            var image = imageCompress(result_image);
+            console.log(image);
+
       			break;
 
       		case 'download':
@@ -222,7 +219,12 @@ window.onload = function(){
       	}
 	}
 
-
+document.querySelector('#btnUpload').addEventListener('click', function(){
+  result_image.src = middleImage;
+  console.log(result_image);
+  var image = imageCompress(result_image);
+  console.log(image);
+});
 
 	/**
 		@Funciones generales
@@ -230,23 +232,23 @@ window.onload = function(){
 
   // funcion compresion de imagen
   function imageCompress(image) {
-
+    let output_image = document.createElement('img');
       if (image.src == "") {
           alert("Debes subir una imagen antes");
           return false;
       }
 
       let quality = parseInt(inputNumberCalidad.value);
-      image.src = jic.compress(image,quality,output_format).src;
+      output_image.src = jic.compress(image,quality,output_format).src;
 
-      let src = image.src;
+      let src = output_image.src;
       let base64str = src.substr(23);
       let decoded = atob(base64str);
 
       let fileSizeCompressed = parseFloat(decoded.length.toLocaleString());
 
       return {
-        img: image,
+        src: src,
         size: fileSizeCompressed,
         quality: quality
       };
