@@ -32,6 +32,7 @@ window.onload = function(){
   var uploadedImageName = 'cropped.jpg';
 	var uploadedImageType = 'image/jpeg';
 
+
 	// Initialize options
 	options = {
 		viewMode: 1,
@@ -118,8 +119,13 @@ window.onload = function(){
     var quality = document.querySelector('#quality');
     var activeAdvancedMessage = document.querySelector('#activeAdvancedMessage');
 
+    let inputRadio = document.querySelectorAll('input[type=radio]');
+
     if (cen) {
-      activeAdvancedMessage.innerHTML = 'Listo';      
+      activeAdvancedMessage.innerHTML = 'Listo'; 
+      for (var item of inputRadio) {
+        item.disabled = true;
+      }     
       result_image.src = middleImage;
       var image = imageCompress(result_image);
       pesoFinal.innerHTML = image.size + " Kb";
@@ -141,6 +147,9 @@ window.onload = function(){
       });
     }else{
       activeAdvancedMessage.innerHTML = 'Activar';
+      for (var item of inputRadio) {
+        item.disabled = false;
+      }
     }
   }
   
@@ -177,7 +186,7 @@ window.onload = function(){
 		var e = event || window.event;
 	  	var target = e.target || e.srcElement;
 	  	var data;
-
+      var activeAdvanced = document.querySelector('#activeAdvanced');
 	  	data = {
       		method: target.getAttribute('data-method')
       	}
@@ -185,18 +194,22 @@ window.onload = function(){
       		case 'libre':
       			options['aspectRatio'] = NaN;
       			cen = false;
+            activeAdvanced.disabled = true;
       			break;
           case 'rectangle':
             options['aspectRatio'] = 16 / 9;
             cen = false;
+            activeAdvanced.disabled = true;
             break;
       		case 'cuadrado':
       			options['aspectRatio'] = 1 / 1;
       			cen = false;
+            activeAdvanced.disabled = true;
       			break;
       		case 'circle':
       			options['aspectRatio'] = 1 / 1;
       			cen = true;
+            activeAdvanced.disabled = true;
       			break;
       		default:
       			console.log('opcion no valida');
@@ -343,34 +356,12 @@ window.onload = function(){
     // resetea los radios activos
     function resetRadio(){
     	let inputRadio = document.querySelectorAll('input[type=radio]');
-    	for (let i = 0; i < inputRadio.length; i++) {
-    		inputRadio[i].checked = false;
-    	}
+      var activeAdvanced = document.querySelector('#activeAdvanced');
+      activeAdvanced.disabled = false;
+      for (var item of inputRadio) {
+        item.checked = false;
+      }
     };
-  // mainInterfaz();
+
 }
-
-/**
-* Interacciones de la interfaz
-*
-// */
-// function mainInterfaz(){
-
-//   var btnSave = document.getElementById('btnSave');
-//   var btnReset = document.getElementById('btnReset');
-//   var btnCancel = document.getElementById('btnCancel');
-//   var btnUpload = document.getElementById('btnUpload');
-//   var btnDownload = document.getElementById('btnDownload');
-//   var inputImage = document.getElementById('inputImage');
-
-//   // inicializacion de valores
-//   var docs_advanced = document.querySelector('.docs-advanced');
-//   var docs_buttons = document.querySelector('.docs-buttons');
-//   var docs_toggles = document.querySelector('.docs-toggles');
-//   docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
-
-
-// }
-
-
 
