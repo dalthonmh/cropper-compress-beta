@@ -8,7 +8,7 @@ window.onload = function(){
   var URL = window.URL || window.webkitURL;
   var arrayImages;
 	var options;
-  var image_compressed;
+  var image_cropped;
   var middleImage; // esta tiene la imagen para ser procesada
 
   /** 
@@ -67,11 +67,9 @@ window.onload = function(){
 
                 reader.onloadend = function(){
                   middleImage = reader.result;
-                  // console.log(middleImage);
+
                   /* interfaz */
-                    docs_advanced.style.display = docs_toggles.style.display = docs_buttons.style.display = 'block';
-                    // btnSave.style.display = 'none';
-                    // btnReset.style.display = 'none';
+                  docs_advanced.style.display = docs_toggles.style.display = docs_buttons.style.display = 'block';
                 }
                 if (file) {
                   reader.readAsDataURL(file);
@@ -120,14 +118,21 @@ window.onload = function(){
     var activeAdvancedMessage = document.querySelector('#activeAdvancedMessage');
 
     let inputRadio = document.querySelectorAll('input[type=radio]');
+    
 
     if (cen) {
       activeAdvancedMessage.innerHTML = 'Listo'; 
       for (var item of inputRadio) {
         item.disabled = true;
-      }     
-      result_image.src = middleImage;
-      var image = imageCompress(result_image);
+      }
+      /**
+      * imagen recortada 
+      */
+      console.log(getImageLive());//imagen recortada
+      
+      // result_image.src = middleImage; // esto se da como valor inicial
+      var image = imageCompress(result_image); // compresion de imagen
+
       pesoFinal.innerHTML = image.size + " Kb";
       quality.innerHTML = image.quality + " %";
 
@@ -217,7 +222,9 @@ window.onload = function(){
       	}
       	options.ready = function(){
       		if (cen) viewCircle();
-          console.log(getImageLive());
+
+          // console.log(getImageLive());
+          image_cropped = getImageLive();
       	};
       	// Restart
       	cropper.destroy();
@@ -241,6 +248,7 @@ window.onload = function(){
 	      		if (cen) croppedCanvas = getRoundedCanvas(croppedCanvas);
 	      		cropImageGenerator(croppedCanvas);
 	      		resetRadio();
+
       			break;
       		case 'cancel':
       			cropper.clear();
@@ -248,7 +256,7 @@ window.onload = function(){
       			resetRadio();
       			break;
       		case 'upload':
-            result_image.src = middleImage;
+            // result_image.src = middleImage;
             var image = imageCompress(result_image);
             console.log(image);
             data = image.src;
@@ -273,7 +281,7 @@ window.onload = function(){
 
   var btnUpload = document.querySelector('#btnUpload');
   btnUpload.addEventListener("click", function (){
-    result_image.src = middleImage;
+    // result_image.src = middleImage;
   });
 	/**
 		@Funciones generales
