@@ -130,7 +130,7 @@ window.onload = function(){
       */
       console.log(getImageLive());//imagen recortada
       
-      // result_image.src = middleImage; // esto se da como valor inicial
+      result_image.src = getImageLive().src; // esto se da como valor inicial
       var image = imageCompress(result_image); // compresion de imagen
 
       pesoFinal.innerHTML = image.size + " Kb";
@@ -258,7 +258,7 @@ window.onload = function(){
       		case 'upload':
             // result_image.src = middleImage;
             var image = imageCompress(result_image);
-            console.log(image);
+            console.log(image.src);
             data = image.src;
       			break;
 
