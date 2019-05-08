@@ -184,7 +184,8 @@ window.onload = function(){
           this.value = min;
       }
   };
-
+  btnCancel.disabled = true;
+  btnCancel.onclick = function () {this.disabled = true};
 	// Opciones cropper
 	var actions = document.getElementById('actions');
 	actions.querySelector('.docs-toggles').onchange = function(event){
@@ -200,26 +201,38 @@ window.onload = function(){
       			options['aspectRatio'] = NaN;
       			cen = false;
             activeAdvanced.disabled = true;
+            btnCancel.disabled = false;
+
       			break;
           case 'rectangle':
             options['aspectRatio'] = 16 / 9;
             cen = false;
             activeAdvanced.disabled = true;
+            btnCancel.disabled = false;
             break;
       		case 'cuadrado':
       			options['aspectRatio'] = 1 / 1;
       			cen = false;
             activeAdvanced.disabled = true;
+            btnCancel.disabled = false;
       			break;
       		case 'circle':
       			options['aspectRatio'] = 1 / 1;
       			cen = true;
             activeAdvanced.disabled = true;
+            btnCancel.disabled = false;
       			break;
       		default:
       			console.log('opcion no valida');
       			break;
       	}
+
+        btnSaveUpload.style.color = '#1A73E8';
+        btnSaveUpload.style.background = 'white';
+        btnSaveUpload.style.fontWeight = 'bold';
+        btnSaveUpload.innerHTML = 'Cortar';
+
+
       	options.ready = function(){
       		if (cen) viewCircle();
 
@@ -232,55 +245,31 @@ window.onload = function(){
 	}
 
 	// Methods cropper
-	actions.querySelector('.docs-buttons').onclick = function (event){
-		var e = event || window.event;
-      	var target = e.target || e.srcElement;
-      	var croppedCanvas;
-      	var data;
 
-      	data = {
-      		method: target.getAttribute('data-method')
-      	}
+  /* btn saveUpload */
+  var btnSaveUpload = document.getElementById('btnSaveUpload');
+  btnSaveUpload.onclick = function(){
+   if (this.innerHTML === "Cortar") {
+    this.innerHTML = "Subir";
+    this.style.background = '#1A73E8';
+    this.style.color = 'white';
+    /* hacer el recorte */
+    var croppedCanvas;
+    croppedCanvas = cropper.getCroppedCanvas();
+    if (cen) croppedCanvas = getRoundedCanvas(croppedCanvas);
+    cropImageGenerator(croppedCanvas);
+    resetRadio();
+    btnCancel.disabled = true;
+   }
+   else{
+    /* opcion subir */
+    var image = imageCompress(result_image);
+    console.log(image.src);
+   }
+  }
 
-      	switch (data.method) {
-      		case 'save':
-      			croppedCanvas = cropper.getCroppedCanvas();
-	      		if (cen) croppedCanvas = getRoundedCanvas(croppedCanvas);
-	      		cropImageGenerator(croppedCanvas);
-	      		resetRadio();
-
-      			break;
-      		case 'cancel':
-      			cropper.clear();
-            cropper.setDragMode();
-      			resetRadio();
-      			break;
-      		case 'upload':
-            // result_image.src = middleImage;
-            var image = imageCompress(result_image);
-            console.log(image.src);
-            data = image.src;
-      			break;
-
-      		case 'download':
-      			console.log('Imagen descargada');
-            // let img = getImageLive();
-            // let data = img.src;
-            let btnDownload = document.getElementById('btnDownload');
-            btnDownload.setAttribute("download", "descarga.jpeg");
-            btnDownload.setAttribute("href", data);
-      			break;
-      		case 'reset':
-      			console.log('pluggin reseteado');
-      			break;
-      		default:
-      			console.log('Opción inválida');
-      			break;
-      	}
-	}
-
-  var btnUpload = document.querySelector('#btnUpload');
-  btnUpload.addEventListener("click", function (){
+  var btnSaveUpload = document.querySelector('#btnSaveUpload');
+  btnSaveUpload.addEventListener("click", function (){
     // result_image.src = middleImage;
   });
 	/**
