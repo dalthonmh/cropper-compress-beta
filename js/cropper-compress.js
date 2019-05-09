@@ -185,7 +185,6 @@ window.onload = function(){
       }
   };
   btnCancel.disabled = true;
-  btnCancel.onclick = function () {this.disabled = true};
 	// Opciones cropper
 	var actions = document.getElementById('actions');
 	actions.querySelector('.docs-toggles').onchange = function(event){
@@ -267,6 +266,18 @@ window.onload = function(){
     console.log(image.src);
    }
   }
+  /*boton cancel*/
+  btnCancel.onclick = function () {
+  	cropper.clear();
+  	this.disabled = true; 
+  	resetRadio();
+  	if (btnSaveUpload.innerHTML === 'Cortar') {
+  		btnSaveUpload.innerHTML = "Subir";
+	    btnSaveUpload.style.background = '#1A73E8';
+	    btnSaveUpload.style.color = 'white';
+  	}
+  };
+
 
   var btnSaveUpload = document.querySelector('#btnSaveUpload');
   btnSaveUpload.addEventListener("click", function (){
