@@ -263,7 +263,8 @@ window.onload = function(){
    else{
     /* opcion subir */
     var image = imageCompress(result_image);
-    console.log(image.src);
+    console.log(getImageLive().src);
+    // console.log(image.src);
    }
   }
   /*boton cancel*/
