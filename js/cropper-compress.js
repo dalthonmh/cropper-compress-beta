@@ -10,6 +10,7 @@ window.onload = function(){
 	var options;
   var image_cropped;
   var middleImage; // esta tiene la imagen para ser procesada
+  var pesoInicialSize; // peso inicial variable para hacer calculos
 
   /** 
   * variables para interfaz
@@ -49,14 +50,15 @@ window.onload = function(){
   	var inputImage = document.querySelector('#inputImage');
   	if (URL) {
   		inputImage.onchange = function(){
-        let pesoInicial = document.getElementById('pesoInicial');
+        let pesoInicialShow = document.getElementById('pesoInicial');
   			let files = this.files;
   			let file;
         let reader = new FileReader();
 
   			if (cropper && files && files.length) {
   				file = files[0];
-          pesoInicial.innerHTML = (parseInt(file.size) / 1024).toFixed(3) + " Kb";
+          pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
+          pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
   				if (/^image\/\w+/.test(file.type)) {
   					uploadedImageType = file.type;
           			uploadedImageName = file.name;
@@ -105,7 +107,7 @@ window.onload = function(){
 
   var activeAdvanced = document.getElementById('activeAdvanced');
   activeAdvanced.addEventListener("click", function (){
-    result_image.src = middleImage;
+    resultImageMiddleImage();
   });
   // again click
   activeAdvanced.onclick = function (){
@@ -133,28 +135,41 @@ window.onload = function(){
       result_image.src = getImageLive().src; // esto se da como valor inicial
       var image = imageCompress(result_image); // compresion de imagen
 
-      pesoFinal.innerHTML = image.size + " Kb";
-      quality.innerHTML = image.quality + " %";
+      showResults(image);
 
       // Vanilla JS jic function when input range change
       inputRangeCalidad.onchange = function(){
           image = imageCompress(result_image);
-          pesoFinal.innerHTML = image.size + " Kb";
-          quality.innerHTML = image.quality + " %";
-          setImageLive(image.src);
+          setImageLive(image.src); // esto actualiza la imagen a ser optimizada
+          showResults(image);
       }
 
       inputNumberCalidad.addEventListener('input', function(){
           image = imageCompress(result_image);
-          pesoFinal.innerHTML = image.size + " Kb";
-          quality.innerHTML = image.quality + " %";
-          setImageLive(image.src);
+          setImageLive(image.src); // esto actualiza la imagen a ser optimizada
+          showResults(image);
       });
     }else{
       activeAdvancedMessage.innerHTML = 'Activar';
       for (var item of inputRadio) {
         item.disabled = false;
       }
+    }
+  }
+  // muestra salida de datos
+  function showResults(image){
+    pesoInicialSize = parseFloat(pesoInicialSize);
+    pesoFinal.innerHTML = image.size + " Kb";
+    let variacionPeso = Math.abs(100 - parseInt(100 * image.size / pesoInicialSize));
+
+    if (image.size <= pesoInicialSize) {
+      quality.classList.add('text-success');
+      quality.classList.remove('text-danger');
+      quality.innerHTML = variacionPeso + " % " + "más pequeño";
+    }else{
+      quality.classList.add('text-danger');
+      quality.classList.remove('text-success');
+      quality.innerHTML = variacionPeso + " % " + "más grande";
     }
   }
   
@@ -248,6 +263,8 @@ window.onload = function(){
   /* btn saveUpload */
   var btnSaveUpload = document.getElementById('btnSaveUpload');
   btnSaveUpload.onclick = function(){
+    let contador; //contador de clicks
+
    if (this.innerHTML === "Cortar") {
     this.innerHTML = "Subir";
     this.style.background = '#1A73E8';
@@ -262,9 +279,14 @@ window.onload = function(){
    }
    else{
     /* opcion subir */
+    // despues de almenos un recorte
+    // console.log(getImageLive().src);
+    // quitar parte negra luego de hacer recorte circular antes de enviar
+
+    // antes de ser cortado
     var image = imageCompress(result_image);
-    console.log(getImageLive().src);
-    // console.log(image.src);
+    resultImageMiddleImage();
+    console.log(image.src);
    }
   }
   /*boton cancel*/
@@ -280,10 +302,9 @@ window.onload = function(){
   };
 
 
-  var btnSaveUpload = document.querySelector('#btnSaveUpload');
-  btnSaveUpload.addEventListener("click", function (){
-    // result_image.src = middleImage;
-  });
+  function resultImageMiddleImage(){
+    result_image.src = middleImage;
+  }
 	/**
 		@Funciones generales
 	*/
