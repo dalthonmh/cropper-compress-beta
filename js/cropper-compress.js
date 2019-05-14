@@ -286,7 +286,10 @@ window.onload = function(){
     // antes de ser cortado
     var image = imageCompress(result_image);
     resultImageMiddleImage();
-    console.log(image.src);
+    let formatoBase64 = image.src.substr(0,10);
+    if (formatoBase64 === 'data:image') {
+      document.querySelector('.docs-buttons').innerHTML = 'enviado';
+    }
    }
   }
   /*boton cancel*/
