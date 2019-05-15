@@ -1,3 +1,9 @@
+/*  */
+/** ESTILOS GENERALES PARA CROPPER-COMPRESS
+ * color  | hex
+ * azul   | #1A73E8
+ * gris   | #EEEEEE
+ */
 table {
   border-collapse: collapse;
   width: 100%;
@@ -48,5 +54,16 @@ table, th, td {
 }
 .text-danger{
   color: #DC3545; /* rojo */
+}
+/* progressbar */
+#myProgress {
+  width: 100%;
+  background-color: #EEEEEE;
+}
+
+#myBar {
+  width: 1%;
+  height: 10px;
+  background-color: #1A73E8;
 }
 

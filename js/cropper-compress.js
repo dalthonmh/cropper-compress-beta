@@ -277,7 +277,7 @@ window.onload = function(){
     resetRadio();
     btnCancel.disabled = true;
    }
-   else{
+   else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
     /* opcion subir */
     // despues de almenos un recorte
     // console.log(getImageLive().src);
@@ -288,7 +288,20 @@ window.onload = function(){
     resultImageMiddleImage();
     let formatoBase64 = image.src.substr(0,10);
     if (formatoBase64 === 'data:image') {
-      document.querySelector('.docs-buttons').innerHTML = 'enviado';
+      console.log(image.src);
+      inputImage.style.display = 'none';
+      actions.innerHTML = 
+      // progress bar
+      `<fieldset>
+        <legend>subiendo</legend>
+        <div id="myProgress">
+          <div id="myBar"></div>
+        <div>
+      </fieldset>`;
+      progressMove();
+    } 
+    else if (formatoBase64 === 'data:,') {
+      this.innerHTML = "uno más";
     }
    }
   }
@@ -311,6 +324,20 @@ window.onload = function(){
 	/**
 		@Funciones generales
 	*/
+  // progressbar
+  function progressMove() {
+    var elem = document.getElementById("myBar");   
+    var width = 1;
+    var id = setInterval(frame, 10);
+    function frame() {
+      if (width >= 100) {
+        clearInterval(id);
+      } else {
+        width++; 
+        elem.style.width = width + '%'; 
+      }
+    }
+  }
 
   // funcion compresion de imagen
   function imageCompress(image) {
