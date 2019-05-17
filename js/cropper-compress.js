@@ -176,7 +176,7 @@ window.onload = function(){
   // Inicialización JIC
   var inputNumberCalidad = document.getElementById('inputNumberCalidad');
   var inputRangeCalidad = document.getElementById('inputRangeCalidad');
-  var output_format = 'jpg'; // hay otros formatos
+  var output_format = 'png'; // hay otros formatos
 
   // input range change
   inputNumberCalidad.value = inputRangeCalidad.value;
@@ -259,11 +259,10 @@ window.onload = function(){
 	}
 
 	// Methods cropper
-
+  var recorte = false; // cuenta si se ha cortado
   /* btn saveUpload */
   var btnSaveUpload = document.getElementById('btnSaveUpload');
   btnSaveUpload.onclick = function(){
-    let contador; //contador de clicks
 
    if (this.innerHTML === "Cortar") {
     this.innerHTML = "Subir";
@@ -276,19 +275,22 @@ window.onload = function(){
     cropImageGenerator(croppedCanvas);
     resetRadio();
     btnCancel.disabled = true;
+    recorte = true; // indica que ha habido almenos un recorte
    }
    else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
-    /* opcion subir */
-    // despues de almenos un recorte
-    // console.log(getImageLive().src);
-    // quitar parte negra luego de hacer recorte circular antes de enviar
-
+    /*  opcion subir 
+        despues de almenos un recorte
+        console.log(getImageLive().src);
+        quitar parte negra luego de hacer recorte circular antes de enviar
+    */
     // antes de ser cortado
     var image = imageCompress(result_image);
     resultImageMiddleImage();
+    if (recorte) image = getImageLive(); // iguala si almenos hubo un recorte
     let formatoBase64 = image.src.substr(0,10);
+    console.log(image.src);
+    // comprueba que sea base64
     if (formatoBase64 === 'data:image') {
-      console.log(image.src);
       inputImage.style.display = 'none';
       actions.innerHTML = 
       // progress bar
@@ -424,4 +426,6 @@ window.onload = function(){
     };
 
 }
+// https://coderwall.com/p/d6ewsa/js-snippet-check-for-image-transparency-of-hovered-coordinates
+// https://sample-videos.com/download-sample-png-image.php
 
