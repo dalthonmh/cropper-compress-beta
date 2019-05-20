@@ -128,8 +128,8 @@ window.onload = function(){
         item.disabled = true;
       }
       /**
-      * imagen recortada 
-      */
+       * imagen recortada 
+       */
       console.log(getImageLive());//imagen recortada
       
       result_image.src = getImageLive().src; // esto se da como valor inicial
@@ -176,7 +176,7 @@ window.onload = function(){
   // Inicialización JIC
   var inputNumberCalidad = document.getElementById('inputNumberCalidad');
   var inputRangeCalidad = document.getElementById('inputRangeCalidad');
-  var output_format = 'png'; // hay otros formatos
+  var output_format = 'jpg'; // hay otros formatos
 
   // input range change
   inputNumberCalidad.value = inputRangeCalidad.value;
@@ -428,4 +428,6 @@ window.onload = function(){
 }
 // https://coderwall.com/p/d6ewsa/js-snippet-check-for-image-transparency-of-hovered-coordinates
 // https://sample-videos.com/download-sample-png-image.php
+// https://github.com/marekventur/png-to-jpeg
+// https://github.com/imagemin/imagemin
 
