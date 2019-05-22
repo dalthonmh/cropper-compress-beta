@@ -26,6 +26,7 @@ window.onload = function(){
   var docs_buttons = document.querySelector('.docs-buttons');
   var docs_toggles = document.querySelector('.docs-toggles');
 
+  // oculta opciones de edición de imagen solo deja seleccionar archivo
   docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
   // fin variables para interfaz
 
@@ -34,7 +35,7 @@ window.onload = function(){
 	var uploadedImageType = 'image/jpeg';
 
 
-	// Initialize options
+	// Initialize options de cropper
 	options = {
 		viewMode: 1,
 		aspectRatio: NaN,
@@ -102,8 +103,8 @@ window.onload = function(){
   var cen;
 
   /**
-  * Funcionalidades checkbox 
-  */
+   * Funcionalidades checkbox 
+   */
 
   var activeAdvanced = document.getElementById('activeAdvanced');
   activeAdvanced.addEventListener("click", function (){
@@ -426,8 +427,3 @@ window.onload = function(){
     };
 
 }
-// https://coderwall.com/p/d6ewsa/js-snippet-check-for-image-transparency-of-hovered-coordinates
-// https://sample-videos.com/download-sample-png-image.php
-// https://github.com/marekventur/png-to-jpeg
-// https://github.com/imagemin/imagemin
-
