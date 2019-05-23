@@ -284,12 +284,21 @@ window.onload = function(){
         console.log(getImageLive().src);
         quitar parte negra luego de hacer recorte circular antes de enviar
     */
-    // antes de ser cortado
+    // antes de ser cortado (sin recorte)
+    async function f2() {
+      var y = await 20;
+      console.log(result_image);
+    }
+    f2();
+
     var image = imageCompress(result_image);
     resultImageMiddleImage();
     if (recorte) image = getImageLive(); // iguala si almenos hubo un recorte
     let formatoBase64 = image.src.substr(0,10);
-    console.log(image.src);
+    // esto es lo que se va a enviar al servidor
+    console.log(image);
+    // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
+
     // comprueba que sea base64
     if (formatoBase64 === 'data:image') {
       inputImage.style.display = 'none';
@@ -325,8 +334,19 @@ window.onload = function(){
     result_image.src = middleImage;
   }
 	/**
-		@Funciones generales
-	*/
+	 *   @Funciones generales
+	 */
+
+   // comprobar que imagen png no tiene transparencia para poder cambiarlo a jpg
+   function compruebaTransparencia(image){
+    // comprobacion de tipo de imagen
+    // console.log(image.src.substr(0,14))
+    console.log(image)
+    // if (image.src.substr(0,14) === 'data:image/png;base64' ){
+
+    // }
+   }
+
   // progressbar
   function progressMove() {
     var elem = document.getElementById("myBar");   
@@ -349,7 +369,7 @@ window.onload = function(){
           alert("Debes subir una imagen antes");
           return false;
       }
-
+      // reduce imagen con jic
       let quality = parseInt(inputNumberCalidad.value);
       output_image.src = jic.compress(image,quality,output_format).src;
 
