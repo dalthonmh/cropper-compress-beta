@@ -71,8 +71,21 @@ window.onload = function(){
                 reader.onloadend = function(){
                   middleImage = reader.result;
 
-                  /* interfaz */
-                  docs_advanced.style.display = docs_toggles.style.display = docs_buttons.style.display = 'block';
+                  /** 
+                   *  Muestra interfaz dependiendo del tipo de imagen con jpg se
+                   *  muestra todo con png no se muestra las opciones avanzadas.
+                   *  formatos admitidos jpg, jpeg, png, gif, webp.
+                   */
+
+                  // detecta valor de file.type
+                  console.log(file.type);
+                  docs_toggles.style.display = docs_buttons.style.display = 'block';
+                  
+                  if (file.type === 'image/jpg' || file.type === 'image/jpeg') {
+                    docs_advanced.style.display = 'block';
+                  }
+                  // compruebaTransparencia() funcion para comparar transparparencia y dependiendo de eso mostrar si o no opciones avanzadas
+                  
                 }
                 if (file) {
                   reader.readAsDataURL(file);
@@ -285,18 +298,18 @@ window.onload = function(){
         quitar parte negra luego de hacer recorte circular antes de enviar
     */
     // antes de ser cortado (sin recorte)
-    async function f2() {
-      var y = await 20;
-      console.log(result_image);
-    }
-    f2();
-
+    // async function f2() {
+    //   var y = await 20;
+    //   console.log(result_image);
+    // }
+    // f2();
+    console.log(result_image);
     var image = imageCompress(result_image);
     resultImageMiddleImage();
     if (recorte) image = getImageLive(); // iguala si almenos hubo un recorte
     let formatoBase64 = image.src.substr(0,10);
     // esto es lo que se va a enviar al servidor
-    console.log(image);
+    console.log(image.src);
     // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
 
     // comprueba que sea base64
@@ -341,7 +354,7 @@ window.onload = function(){
    function compruebaTransparencia(image){
     // comprobacion de tipo de imagen
     // console.log(image.src.substr(0,14))
-    console.log(image)
+    // console.log(image)
     // if (image.src.substr(0,14) === 'data:image/png;base64' ){
 
     // }
