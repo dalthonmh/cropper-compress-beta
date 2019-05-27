@@ -73,7 +73,8 @@ window.onload = function(){
 
                   /** 
                    *  Muestra interfaz dependiendo del tipo de imagen con jpg se
-                   *  muestra todo con png no se muestra las opciones avanzadas.
+                   *  muestra todo con png se muestra las opciones avanzadas pero 
+                   *  no puede alterar la calidad.
                    *  formatos admitidos jpg, jpeg, png, gif, webp.
                    */
 
@@ -81,9 +82,9 @@ window.onload = function(){
                   console.log(file.type);
                   docs_toggles.style.display = docs_buttons.style.display = 'block';
                   
-                  if (file.type === 'image/jpg' || file.type === 'image/jpeg') {
-                    docs_advanced.style.display = 'block';
-                  }
+                  // if (file.type === 'image/jpg' || file.type === 'image/jpeg') {
+                  //   docs_advanced.style.display = 'block';
+                  // }
                   // compruebaTransparencia() funcion para comparar transparparencia y dependiendo de eso mostrar si o no opciones avanzadas
                   
                 }
