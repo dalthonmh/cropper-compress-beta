@@ -11,10 +11,12 @@ window.onload = function(){
   var image_cropped;
   var middleImage; // esta tiene la imagen para ser procesada
   var pesoInicialSize; // peso inicial variable para hacer calculos
+  var hasAlphaValue; // obtiene tranparencia de la imagenç
+  var fileImagen; // obtiene imagen para ser compresa
 
   /** 
-  * variables para interfaz
-  */
+   * variables para interfaz
+   */
 
   var btnSave = document.getElementById('btnSave');
   var btnReset = document.getElementById('btnReset');
@@ -50,11 +52,14 @@ window.onload = function(){
   	// cargar imagen
   	var inputImage = document.querySelector('#inputImage');
   	if (URL) {
-  		inputImage.onchange = function(){
+  		inputImage.onchange = function(e){
         let pesoInicialShow = document.getElementById('pesoInicial');
   			let files = this.files;
   			let file;
-        let reader = new FileReader();
+        var input = e.target;
+        var reader = new FileReader();
+        var readerPng = new FileReader();
+        fileImagen = files[0];
 
   			if (cropper && files && files.length) {
   				file = files[0];
@@ -68,6 +73,7 @@ window.onload = function(){
 	          		}
 	          		uploadedImageURL = URL.createObjectURL(file);
 
+                // reader
                 reader.onloadend = function(){
                   middleImage = reader.result;
 
@@ -82,13 +88,23 @@ window.onload = function(){
                   console.log(file.type);
                   docs_toggles.style.display = docs_buttons.style.display = 'block';
                   
-                  if (file.type === 'image/jpg' || file.type === 'image/jpeg') {
+                  if (file.type === 'image/jpg' || file.type === 'image/jpeg' || !hasAlphaValue) {
                     docs_advanced.style.display = 'block';
                   }
                   
-                  // compruebaTransparencia() funcion para comparar transparparencia y dependiendo de eso mostrar si o no opciones avanzadas
-                  
                 }
+
+                // readerPng
+                readerPng.onload = function(){
+                  if(file.type === 'image/png'){
+                    var arrayBuffer = readerPng.result;
+                    hasAlphaValue = isTransparent(arrayBuffer).hasAlpha;
+                    console.log(hasAlphaValue);
+                  }
+                };
+                readerPng.readAsArrayBuffer(input.files[0]);
+                
+
                 if (file) {
                   reader.readAsDataURL(file);
                 }else{
@@ -278,7 +294,7 @@ window.onload = function(){
   var recorte = false; // cuenta si se ha cortado
   /* btn saveUpload */
   var btnSaveUpload = document.getElementById('btnSaveUpload');
-  btnSaveUpload.onclick = function(){
+  btnSaveUpload.onclick = async function(){
 
    if (this.innerHTML === "Cortar") {
     this.innerHTML = "Subir";
@@ -299,22 +315,34 @@ window.onload = function(){
         console.log(getImageLive().src);
         quitar parte negra luego de hacer recorte circular antes de enviar
     */
-    // antes de ser cortado (sin recorte)
-    // async function f2() {
-    //   var y = await 20;
-    //   console.log(result_image);
-    // }
-    // f2();
-    console.log(result_image);
-    var image = imageCompress(result_image);
-    resultImageMiddleImage();
-    if (recorte) image = getImageLive(); // iguala si almenos hubo un recorte
-    let formatoBase64 = image.src.substr(0,10);
-    // esto es lo que se va a enviar al servidor
-    console.log(image.src);
-    // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
+    var image; // imagen a ser compresa
+    var base64Output; // string de salida de imagen
+    if (hasAlphaValue) {
+      
+      var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
+      var output = await imageCompression(fileImagen, options);
+      // blob to base64
+      var reader = new FileReader();
+       reader.readAsDataURL(output); 
+       reader.onloadend = function() {
+         base64Output = reader.result;                
+         console.log( 'A ' + base64Output);
+      }
+
+    }else {
+      // console.log(result_image); // imagen a ser comprimida (salida formato jpg)
+      image = imageCompress(result_image);
+      resultImageMiddleImage();
+      if (recorte) image = getImageLive(); // iguala si almenos hubo un recorte (formato png)
+      // esto es lo que se va a enviar al servidor
+      base64Output = image.src;
+      console.log( 'B ' + base64Output);
+      // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
+    }
 
     // comprueba que sea base64
+    let formatoBase64 = base64Output.substr(0,10);
+    // muestra progessbar
     if (formatoBase64 === 'data:image') {
       inputImage.style.display = 'none';
       actions.innerHTML = 
@@ -348,19 +376,28 @@ window.onload = function(){
   function resultImageMiddleImage(){
     result_image.src = middleImage;
   }
-	/**
-	 *   @Funciones generales
-	 */
 
-   // comprobar que imagen png no tiene transparencia para poder cambiarlo a jpg
-   function compruebaTransparencia(image){
-    // comprobacion de tipo de imagen
-    // console.log(image.src.substr(0,14))
-    // console.log(image)
-    // if (image.src.substr(0,14) === 'data:image/png;base64' ){
+  //  @Funciones generales
 
-    // }
-   }
+  /**
+   * Revisa si tiene tranparencia
+   * @param {ArrayBUffer} buffer - array buffer obtendo de file reader
+   * @return {boolean} transparency - value true or false
+   */
+   function isTransparent(buffer) {
+    var view = new DataView(buffer);
+    // is a PNG?
+    if (view.getUint32(0) === 0x89504E47 && view.getUint32(4) === 0x0D0A1A0A) {
+      // We know format field exists in the IHDR chunk. The chunk exists at 
+      // offset 8 +8 bytes (size, name) +8 (depth) & +9 (type)
+      var depth = view.getUint8(8 + 8 + 8);
+      var type  = view.getUint8(8 + 8 + 9);
+      
+      return {
+        hasAlpha: type === 4 || type === 6 // grayscale + alpha or RGB + alpha
+      }
+    }
+  }
 
   // progressbar
   function progressMove() {
