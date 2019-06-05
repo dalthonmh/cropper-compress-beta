@@ -317,6 +317,7 @@ window.onload = function(){
     */
     var image; // imagen a ser compresa
     var base64Output; // string de salida de imagen
+    var formatoBase64; // verifica si tiene formato base 64
     if (hasAlphaValue) {
       
       var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
@@ -325,7 +326,8 @@ window.onload = function(){
       var reader = new FileReader();
        reader.readAsDataURL(output); 
        reader.onloadend = function() {
-         base64Output = reader.result;                
+         base64Output = reader.result;
+         // formatoBase64 = base64Output.substr(0,10);                
          console.log( 'A ' + base64Output);
       }
 
@@ -338,10 +340,10 @@ window.onload = function(){
       base64Output = image.src;
       console.log( 'B ' + base64Output);
       // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
+      formatoBase64 = base64Output.substr(0,10);
     }
-
+    console.log(formatoBase64);
     // comprueba que sea base64
-    let formatoBase64 = base64Output.substr(0,10);
     // muestra progessbar
     if (formatoBase64 === 'data:image') {
       inputImage.style.display = 'none';
