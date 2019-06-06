@@ -330,8 +330,9 @@ window.onload = function(){
          reader.readAsDataURL(output); 
          reader.onloadend = function() {
            base64Output = reader.result;
-           // formatoBase64 = base64Output.substr(0,10);                
            console.log(base64Output);
+           formatoBase64 = base64Output.substr(0,10);
+           muestraProgressBar(formatoBase64);
         }
 
       }else {
@@ -349,6 +350,8 @@ window.onload = function(){
         console.log(base64Output);
         // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
         formatoBase64 = base64Output.substr(0,10);
+        console.log(formatoBase64);
+        muestraProgressBar(formatoBase64);
       }
     }else{
       console.log("hubo recorte");
@@ -358,6 +361,9 @@ window.onload = function(){
       if (!hasAlphaValue) {
         image = imageCompress(image);
         console.log(image.src);
+        formatoBase64 = image.src.substr(0,10);
+        muestraProgressBar(formatoBase64);
+
       }else{
         // si tiene tranparencia
         console.log(image);
@@ -377,32 +383,34 @@ window.onload = function(){
          reader.readAsDataURL(output); 
          reader.onloadend = function() {
            base64Output = reader.result;
-           // formatoBase64 = base64Output.substr(0,10);                
+           formatoBase64 = base64Output.substr(0,10);                
            console.log(base64Output);
+           muestraProgressBar(formatoBase64);
         }
       }
       
     }
 
-    // console.log(formatoBase64); // indefinido si hubo recorte
     // comprueba que sea base64
     // muestra progessbar
-    if (formatoBase64 === 'data:image') {
-      inputImage.style.display = 'none';
-      actions.innerHTML = 
-      // progress bar
-      `<fieldset>
-        <legend>subiendo</legend>
-        <div id="myProgress">
-          <div id="myBar"></div>
-        <div>
-      </fieldset>`;
-      progressMove();
-    } 
-    else if (formatoBase64 === 'data:,') {
-      this.innerHTML = "uno más";
+    function muestraProgressBar(formatoBase64){
+      if (formatoBase64 === 'data:image') {
+        inputImage.style.display = 'none';
+        actions.innerHTML = 
+        // progress bar
+        `<fieldset>
+          <legend>subiendo</legend>
+          <div id="myProgress">
+            <div id="myBar"></div>
+          <div>
+        </fieldset>`;
+        progressMove();
+      } 
+      else if (formatoBase64 === 'data:,') {
+        btnSaveUpload.innerHTML = "uno más";
+      }
     }
-   }
+   } // fin boton subir
   }
   /*boton cancel*/
   btnCancel.onclick = function () {
