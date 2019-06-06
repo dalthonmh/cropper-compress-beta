@@ -42,7 +42,7 @@ window.onload = function(){
 		viewMode: 1,
 		aspectRatio: NaN,
 		ready: function (event) {
-  			cropper.setDragMode();
+  			cropper.setDragMode("move");
   			cropper.clear();
         // console.log(getImageLive());
   		}
@@ -281,7 +281,6 @@ window.onload = function(){
 
       	options.ready = function(){
       		if (cen) viewCircle();
-
           // console.log(getImageLive());
           image_cropped = getImageLive();
       	};
@@ -312,37 +311,80 @@ window.onload = function(){
    else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
     /*  opcion subir 
         despues de almenos un recorte
-        console.log(getImageLive().src);
         quitar parte negra luego de hacer recorte circular antes de enviar
     */
+    // console.log(getImageLive().src);
+
     var image; // imagen a ser compresa
     var base64Output; // string de salida de imagen
     var formatoBase64; // verifica si tiene formato base 64
-    if (hasAlphaValue) {
-      
-      var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
-      var output = await imageCompression(fileImagen, options);
-      // blob to base64
-      var reader = new FileReader();
-       reader.readAsDataURL(output); 
-       reader.onloadend = function() {
-         base64Output = reader.result;
-         // formatoBase64 = base64Output.substr(0,10);                
-         console.log( 'A ' + base64Output);
-      }
 
-    }else {
-      // console.log(result_image); // imagen a ser comprimida (salida formato jpg)
-      image = imageCompress(result_image);
-      resultImageMiddleImage();
-      if (recorte) image = getImageLive(); // iguala si almenos hubo un recorte (formato png)
-      // esto es lo que se va a enviar al servidor
-      base64Output = image.src;
-      console.log( 'B ' + base64Output);
-      // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
-      formatoBase64 = base64Output.substr(0,10);
+    // comparar si hubo recorte
+    if (!recorte) {
+      if (hasAlphaValue) {
+      
+        var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
+        var output = await imageCompression(fileImagen, options);
+        // blob to base64
+        var reader = new FileReader();
+         reader.readAsDataURL(output); 
+         reader.onloadend = function() {
+           base64Output = reader.result;
+           // formatoBase64 = base64Output.substr(0,10);                
+           console.log(base64Output);
+        }
+
+      }else {
+        // console.log(result_image); // imagen a ser comprimida (salida formato jpg)
+        image = imageCompress(result_image);
+        resultImageMiddleImage();
+        // // iguala si almenos hubo un recorte (formato png)
+        // if (recorte){
+        //   image = getImageLive();
+        //   console.log(image);
+        //   // comprimir imagen png
+        // }
+        // esto es lo que se va a enviar al servidor
+        base64Output = image.src;
+        console.log(base64Output);
+        // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
+        formatoBase64 = base64Output.substr(0,10);
+      }
+    }else{
+      console.log("hubo recorte");
+      image = getImageLive();
+
+      // si no tiene tranparencia
+      if (!hasAlphaValue) {
+        image = imageCompress(image);
+        console.log(image.src);
+      }else{
+        // si tiene tranparencia
+        console.log(image);
+        function srcToFile(src, fileName, mimeType){
+            return (fetch(src)
+                .then(function(res){return res.arrayBuffer();})
+                .then(function(buf){return new File([buf], fileName, {type:mimeType});})
+            );
+        }
+        let srcFile = await srcToFile(image.src, 'new.png', 'image/png');
+        console.log(srcFile);
+        var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
+        var output = await imageCompression(srcFile, options);
+        // console.log(output);
+        // blob to base64
+        var reader = new FileReader();
+         reader.readAsDataURL(output); 
+         reader.onloadend = function() {
+           base64Output = reader.result;
+           // formatoBase64 = base64Output.substr(0,10);                
+           console.log(base64Output);
+        }
+      }
+      
     }
-    console.log(formatoBase64);
+
+    // console.log(formatoBase64); // indefinido si hubo recorte
     // comprueba que sea base64
     // muestra progessbar
     if (formatoBase64 === 'data:image') {
