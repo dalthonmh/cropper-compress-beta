@@ -1,7 +1,10 @@
+/** 
+ * CropperCompress v1.0.0
+ */
 window.onload = function(){
 	'use strict';
 
-	// global variables
+	/** Variables globales */
   var containerImage = document.getElementById('containerImage');
 	var source_image = document.getElementById('source_image');
   var result_image = document.getElementById('result_image');
@@ -14,24 +17,14 @@ window.onload = function(){
   var hasAlphaValue; // obtiene tranparencia de la imagenç
   var fileImagen; // obtiene imagen para ser compresa
 
-  /** 
-   * variables para interfaz
-   */
-
-  var btnSave = document.getElementById('btnSave');
-  var btnReset = document.getElementById('btnReset');
+  // Variables para interfaz
   var btnCancel = document.getElementById('btnCancel');
-  var btnUpload = document.getElementById('btnUpload');
-  var btnDownload = document.getElementById('btnDownload');
-  var inputImage = document.getElementById('inputImage');
   var docs_advanced = document.querySelector('.docs-advanced');
   var docs_buttons = document.querySelector('.docs-buttons');
   var docs_toggles = document.querySelector('.docs-toggles');
 
-  // oculta opciones de edición de imagen solo deja seleccionar archivo
+  // Oculta opciones de edición de imagen solo deja seleccionar archivo
   docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
-  // fin variables para interfaz
-
 
   var uploadedImageName = 'cropped.jpg';
 	var uploadedImageType = 'image/jpeg';
@@ -85,7 +78,6 @@ window.onload = function(){
                    */
 
                   // detecta valor de file.type
-                  console.log(file.type);
                   docs_toggles.style.display = docs_buttons.style.display = 'block';
                   
                   if (file.type === 'image/jpg' || file.type === 'image/jpeg' || !hasAlphaValue) {
@@ -99,7 +91,6 @@ window.onload = function(){
                   if(file.type === 'image/png'){
                     var arrayBuffer = readerPng.result;
                     hasAlphaValue = isTransparent(arrayBuffer).hasAlpha;
-                    console.log(hasAlphaValue);
                   }
                 };
                 readerPng.readAsArrayBuffer(input.files[0]);
@@ -107,8 +98,6 @@ window.onload = function(){
 
                 if (file) {
                   reader.readAsDataURL(file);
-                }else{
-                  // source_image.src = "";
                 }
 
                 source_image.src = uploadedImageURL; // esto muestra la imagen
@@ -133,10 +122,7 @@ window.onload = function(){
   var uploadedImageURL;
   var cen;
 
-  /**
-   * Funcionalidades checkbox 
-   */
-
+  /** Funcionalidades checkbox */
   var activeAdvanced = document.getElementById('activeAdvanced');
   activeAdvanced.addEventListener("click", function (){
     resultImageMiddleImage();
@@ -159,11 +145,7 @@ window.onload = function(){
       for (var item of inputRadio) {
         item.disabled = true;
       }
-      /**
-       * imagen recortada 
-       */
-      console.log(getImageLive());//imagen recortada
-      
+      /** Imagen recortada. */
       result_image.src = getImageLive().src; // esto se da como valor inicial
       var image = imageCompress(result_image); // compresion de imagen
 
@@ -281,7 +263,6 @@ window.onload = function(){
 
       	options.ready = function(){
       		if (cen) viewCircle();
-          // console.log(getImageLive());
           image_cropped = getImageLive();
       	};
       	// Restart
@@ -309,12 +290,10 @@ window.onload = function(){
     recorte = true; // indica que ha habido almenos un recorte
    }
    else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
-    /*  opcion subir 
-        despues de almenos un recorte
-        quitar parte negra luego de hacer recorte circular antes de enviar
-    */
-    // console.log(getImageLive().src);
-
+    /** Opcion subir
+     *  despues de almenos un recorte
+     *  quitar parte negra luego de hacer recorte circular antes de enviar
+     */
     var image; // imagen a ser compresa
     var base64Output; // string de salida de imagen
     var formatoBase64; // verifica si tiene formato base 64
@@ -336,25 +315,14 @@ window.onload = function(){
         }
 
       }else {
-        // console.log(result_image); // imagen a ser comprimida (salida formato jpg)
         image = imageCompress(result_image);
         resultImageMiddleImage();
-        // // iguala si almenos hubo un recorte (formato png)
-        // if (recorte){
-        //   image = getImageLive();
-        //   console.log(image);
-        //   // comprimir imagen png
-        // }
-        // esto es lo que se va a enviar al servidor
         base64Output = image.src;
-        console.log(base64Output);
-        // comprobar si la imagen no tiene transparencia para poderlo cambiar a jpg
         formatoBase64 = base64Output.substr(0,10);
-        console.log(formatoBase64);
         muestraProgressBar(formatoBase64);
       }
     }else{
-      console.log("hubo recorte");
+      // hubo recorte
       image = getImageLive();
 
       // si no tiene tranparencia
@@ -366,13 +334,6 @@ window.onload = function(){
 
       }else{
         // si tiene tranparencia
-        console.log(image);
-        function srcToFile(src, fileName, mimeType){
-            return (fetch(src)
-                .then(function(res){return res.arrayBuffer();})
-                .then(function(buf){return new File([buf], fileName, {type:mimeType});})
-            );
-        }
         let srcFile = await srcToFile(image.src, 'new.png', 'image/png');
         console.log(srcFile);
         var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
@@ -390,27 +351,8 @@ window.onload = function(){
       }
       
     }
-
-    // comprueba que sea base64
-    // muestra progessbar
-    function muestraProgressBar(formatoBase64){
-      if (formatoBase64 === 'data:image') {
-        inputImage.style.display = 'none';
-        actions.innerHTML = 
-        // progress bar
-        `<fieldset>
-          <legend>subiendo</legend>
-          <div id="myProgress">
-            <div id="myBar"></div>
-          <div>
-        </fieldset>`;
-        progressMove();
-      } 
-      else if (formatoBase64 === 'data:,') {
-        btnSaveUpload.innerHTML = "uno más";
-      }
-    }
    } // fin boton subir
+
   }
   /*boton cancel*/
   btnCancel.onclick = function () {
@@ -451,7 +393,21 @@ window.onload = function(){
     }
   }
 
-  // progressbar
+  /**
+   * Convierte archivo src a fileType
+   * @param {image src} src - source
+   * @param {string} fileName - Nombre de archivo
+   * @param {mimeType} mimeType - formato de MIME
+   * @returns {FileType}
+   */
+  function srcToFile(src, fileName, mimeType){
+      return (fetch(src)
+          .then(function(res){return res.arrayBuffer();})
+          .then(function(buf){return new File([buf], fileName, {type:mimeType});})
+      );
+  }
+
+  /** Progessbar */
   function progressMove() {
     var elem = document.getElementById("myBar");   
     var width = 1;
@@ -466,7 +422,13 @@ window.onload = function(){
     }
   }
 
-  // funcion compresion de imagen
+  /** 
+   * Compresion de imagen JIC 
+   * @param {image} imagen
+   * @returns {src} src - source image compresed
+   * @returns {number} size - size after compression
+   * @returns {number} quality - quality of compression
+   */
   function imageCompress(image) {
     let output_image = document.createElement('img');
       if (image.src == "") {
@@ -491,63 +453,97 @@ window.onload = function(){
 
   };
 
-  // mostrar imagen
+  /** Get image live */
   function getImageLive(){
     var imgShow = document.getElementsByClassName('cropper-hide');
     return imgShow[0];
   }
 
+  /** Set image live */
   function setImageLive(imageSrc){
     let imgShow = document.getElementsByClassName('cropper-hide');
     imgShow[0].src = imageSrc;
   }
-	// mostrar visor circular
-    function viewCircle(){
-    	document.querySelector('.cropper-view-box').className += " cropper-circle";
-    	document.querySelector('.cropper-face').className += " cropper-circle";
-    }
-    // recorte de imagen
-    function cropImageGenerator(croppedCanvas){
-    	let rectangleImage;
 
-    	rectangleImage = document.createElement('img');
-    	rectangleImage.src = croppedCanvas.toDataURL();
-    	rectangleImage.id = 'image';
-    	containerImage.innerHTML = '';
-    	containerImage.appendChild(rectangleImage);
-    	arrayImages.push(rectangleImage); // nueva imagen recibida
-    	return cropper = new Cropper(arrayImages[arrayImages.length-1], {
-    		viewMode: 1,
-    		ready: function (event) {
-    			cropper.setDragMode();
-    			cropper.clear();
-    		}
-    	});
-    }
-    // Recorta imagen en circular
-    function getRoundedCanvas(sourceCanvas) {
-	  	let canvas = document.createElement('canvas');
-	  	let context = canvas.getContext('2d');
-	  	let width = sourceCanvas.width;
-	  	let height = sourceCanvas.height;
-	  	canvas.width = width;
-	  	canvas.height = height;
-	  	context.imageSmoothingEnabled = true;
-	  	context.drawImage(sourceCanvas, 0, 0, width, height);
-	  	context.globalCompositeOperation = 'destination-in';
-	  	context.beginPath();
-	  	context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
-	  	context.fill();
-	  	return canvas;
+	/** Show circle area before to cut*/
+  function viewCircle(){
+  	document.querySelector('.cropper-view-box').className += " cropper-circle";
+  	document.querySelector('.cropper-face').className += " cropper-circle";
+  }
+
+  /** 
+   * Recorte de imagen
+   * @param {image} croppedCanvas - Image to be cropped
+   * @returns {object} e - canvas recorted values
+   */
+  function cropImageGenerator(croppedCanvas){
+  	let rectangleImage;
+  	rectangleImage = document.createElement('img');
+  	rectangleImage.src = croppedCanvas.toDataURL();
+  	rectangleImage.id = 'image';
+  	containerImage.innerHTML = '';
+  	containerImage.appendChild(rectangleImage);
+  	arrayImages.push(rectangleImage); // nueva imagen recibida
+  	return cropper = new Cropper(arrayImages[arrayImages.length-1], {
+  		viewMode: 1,
+  		ready: function (event) {
+        cropper.setDragMode("move");
+  			cropper.clear();
+  		}
+  	});
+  }
+
+  /** 
+   * Recorta imagen en circular
+   * @param {canvas} sourceCanvas - canvas rectangular
+   * @return {canvas} canvas circular shape
+   */
+  function getRoundedCanvas(sourceCanvas) {
+  	let canvas = document.createElement('canvas');
+  	let context = canvas.getContext('2d');
+  	let width = sourceCanvas.width;
+  	let height = sourceCanvas.height;
+  	canvas.width = width;
+  	canvas.height = height;
+  	context.imageSmoothingEnabled = true;
+  	context.drawImage(sourceCanvas, 0, 0, width, height);
+  	context.globalCompositeOperation = 'destination-in';
+  	context.beginPath();
+  	context.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI, true);
+  	context.fill();
+  	return canvas;
 	};
-    // resetea los radios activos
-    function resetRadio(){
-    	let inputRadio = document.querySelectorAll('input[type=radio]');
-      var activeAdvanced = document.querySelector('#activeAdvanced');
-      activeAdvanced.disabled = false;
-      for (var item of inputRadio) {
-        item.checked = false;
-      }
-    };
+
+  /** Reset active radius. */
+  function resetRadio(){
+  	let inputRadio = document.querySelectorAll('input[type=radio]');
+    var activeAdvanced = document.querySelector('#activeAdvanced');
+    activeAdvanced.disabled = false;
+    for (var item of inputRadio) {
+      item.checked = false;
+    }
+  };
+
+  /** 
+   * Muestra progressbar after crop
+   * @param {base64} formatoBase64 - image string base 64 form
+   */
+  function muestraProgressBar(formatoBase64){
+    if (formatoBase64 === 'data:image') {
+      inputImage.style.display = 'none';
+      actions.innerHTML = 
+      // progress bar
+      `<fieldset>
+        <legend>subiendo</legend>
+        <div id="myProgress">
+          <div id="myBar"></div>
+        <div>
+      </fieldset>`;
+      progressMove();
+    } 
+    else if (formatoBase64 === 'data:,') {
+      btnSaveUpload.innerHTML = "uno más";
+    }
+  }
 
 }
