@@ -318,6 +318,7 @@ window.onload = function(){
         image = imageCompress(result_image);
         resultImageMiddleImage();
         base64Output = image.src;
+        console.log(base64Output);
         formatoBase64 = base64Output.substr(0,10);
         muestraProgressBar(formatoBase64);
       }
