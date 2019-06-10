@@ -5,23 +5,24 @@ window.onload = function(){
 	'use strict';
 
 	/** Variables globales */
-  var containerImage = document.getElementById('containerImage');
 	var source_image = document.getElementById('source_image');
   var result_image = document.getElementById('result_image');
+  var containerImage = document.getElementById('containerImage');
   var URL = window.URL || window.webkitURL;
-  var arrayImages;
-	var options;
-  var image_cropped;
-  var middleImage; // esta tiene la imagen para ser procesada
-  var pesoInicialSize; // peso inicial variable para hacer calculos
-  var hasAlphaValue; // obtiene tranparencia de la imagenç
+  var options;
   var fileImagen; // obtiene imagen para ser compresa
+  var arrayImages;
+  var middleImage; // esta tiene la imagen para ser procesada
+  var image_cropped;
+  var hasAlphaValue; // obtiene tranparencia de la imagenç
+  var pesoInicialSize; // peso inicial variable para hacer calculos
+
 
   // Variables para interfaz
   var btnCancel = document.getElementById('btnCancel');
-  var docs_advanced = document.querySelector('.docs-advanced');
   var docs_buttons = document.querySelector('.docs-buttons');
   var docs_toggles = document.querySelector('.docs-toggles');
+  var docs_advanced = document.querySelector('.docs-advanced');
 
   // Oculta opciones de edición de imagen solo deja seleccionar archivo
   docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
@@ -292,7 +293,6 @@ window.onload = function(){
    else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
     /** Opcion subir
      *  despues de almenos un recorte
-     *  quitar parte negra luego de hacer recorte circular antes de enviar
      */
     var image; // imagen a ser compresa
     var base64Output; // string de salida de imagen
@@ -309,7 +309,7 @@ window.onload = function(){
          reader.readAsDataURL(output); 
          reader.onloadend = function() {
            base64Output = reader.result;
-           console.log(base64Output);
+           isBase64(base64Output);
            formatoBase64 = base64Output.substr(0,10);
            muestraProgressBar(formatoBase64);
         }
@@ -318,7 +318,7 @@ window.onload = function(){
         image = imageCompress(result_image);
         resultImageMiddleImage();
         base64Output = image.src;
-        console.log(base64Output);
+        isBase64(base64Output);
         formatoBase64 = base64Output.substr(0,10);
         muestraProgressBar(formatoBase64);
       }
@@ -329,14 +329,13 @@ window.onload = function(){
       // si no tiene tranparencia
       if (!hasAlphaValue) {
         image = imageCompress(image);
-        console.log(image.src);
+        isBase64(image.src);
         formatoBase64 = image.src.substr(0,10);
         muestraProgressBar(formatoBase64);
 
       }else{
         // si tiene tranparencia
         let srcFile = await srcToFile(image.src, 'new.png', 'image/png');
-        console.log(srcFile);
         var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
         var output = await imageCompression(srcFile, options);
         // console.log(output);
@@ -346,7 +345,7 @@ window.onload = function(){
          reader.onloadend = function() {
            base64Output = reader.result;
            formatoBase64 = base64Output.substr(0,10);                
-           console.log(base64Output);
+           isBase64(base64Output);
            muestraProgressBar(formatoBase64);
         }
       }
@@ -547,4 +546,28 @@ window.onload = function(){
     }
   }
 
+  /**
+   * compara si es formato base64
+   */
+  function isBase64(dataToServer){
+    let dataToServerString = dataToServer.substr(0,10);
+
+    if (dataToServerString === 'data:image') {
+      /**
+       * enviar al servidor con axios
+       */
+      axios.post('https://jsonplaceholder.typicode.com/posts',{
+        image: dataToServer,
+      })
+      .then((r) => console.log(r))
+      .catch((e) => console.log(e));
+    }
+  }
+
+  
+  document.getElementById('imageInputForm').addEventListener('submit', getRequestPost);
+
+  function getRequestPost(evt){
+    evt.preventDefault();
+  }
 }

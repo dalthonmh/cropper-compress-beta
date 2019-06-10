@@ -17,7 +17,7 @@
 			<img id="source_image" crossorigin="anonymous" src="">
 			<img id="result_image" style="display: none;" crossorigin="anonymous" src="">
 		</div>
-		<form action="">
+		<form action="" id="imageInputForm">
 			<input type="file" id="inputImage" accept="image/*" />
 			<div id="actions">
 
@@ -45,7 +45,7 @@
 					<legend>Opciones</legend>
 					<button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
 					<div style="float: right;">
-						<button type="button" id="btnSaveUpload">Subir</button>
+						<button type="submit" id="btnSaveUpload">Subir</button>
 					</div>
 				</fieldset>
 				
@@ -102,6 +102,8 @@
 	<script src="pluggins/JIC.min.js"></script>
 	<!-- browser-image-compression -->
 	<script src="pluggins/browser-image-compression.js"></script>
+	<!-- axios v0.19.0 -->
+	<script src="pluggins/axios.min.js"></script>
 	<!-- cropper-compress.js -->
 	<script src="js/cropper-compress.js"></script>
 </body>
