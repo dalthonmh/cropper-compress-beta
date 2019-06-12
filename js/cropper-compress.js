@@ -298,8 +298,9 @@ window.onload = function(){
     var base64Output; // string de salida de imagen
     var formatoBase64; // verifica si tiene formato base 64
 
-    // comparar si hubo recorte
+    // comparar si no tuvo recorte
     if (!recorte) {
+      // compara si tiene tranparencia
       if (hasAlphaValue) {
       
         var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
@@ -315,6 +316,7 @@ window.onload = function(){
         }
 
       }else {
+        // si no tiene tranparencia
         image = imageCompress(result_image);
         resultImageMiddleImage();
         base64Output = image.src;
@@ -323,7 +325,7 @@ window.onload = function(){
         muestraProgressBar(formatoBase64);
       }
     }else{
-      // hubo recorte
+      // si hubo recorte
       image = getImageLive();
 
       // si no tiene tranparencia
@@ -556,6 +558,7 @@ window.onload = function(){
       /**
        * enviar al servidor con axios
        */
+      console.log(dataToServer);
       axios.post('https://jsonplaceholder.typicode.com/posts',{
         image: dataToServer,
       })
