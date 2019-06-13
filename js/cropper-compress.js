@@ -328,12 +328,32 @@ window.onload = function(){
       // si hubo recorte
       image = getImageLive();
 
-      // si no tiene tranparencia
+      // si no tiene tranparencia (jpg)
       if (!hasAlphaValue) {
         image = imageCompress(image);
         isBase64(image.src);
         formatoBase64 = image.src.substr(0,10);
         muestraProgressBar(formatoBase64);
+        // console.log(image.src);
+        // // creacion de canvas
+        // var canvas = document.createElement('canvas');
+        // var ctx = canvas.getContext('2d');
+
+        // var cw = canvas.width;
+        // var ch = canvas.height;
+
+        // var img = new Image();
+        // img.onload = function(){
+        //   ctx.drawImage(img, 0, 0);
+        //   cw = image.img.naturalWidth;
+        //   ch = image.img.naturalHeight;
+        //   ctx.globalCompositeOperation='destination-in';
+        //   ctx.beginPath();
+        //   ctx.arc(cw/2,ch/2,ch/2,0,Math.PI*2);
+        //   ctx.closePath();
+        //   ctx.fill();
+        // }
+        // console.log(canvas.toDataURL());
 
       }else{
         // si tiene tranparencia
@@ -448,6 +468,7 @@ window.onload = function(){
       let fileSizeCompressed = parseFloat(decoded.length.toLocaleString());
 
       return {
+        img: output_image,
         src: src,
         size: fileSizeCompressed,
         quality: quality
@@ -503,6 +524,7 @@ window.onload = function(){
   function getRoundedCanvas(sourceCanvas) {
   	let canvas = document.createElement('canvas');
   	let context = canvas.getContext('2d');
+    // img onload para que no retorne data:,
   	let width = sourceCanvas.width;
   	let height = sourceCanvas.height;
   	canvas.width = width;
