@@ -23,6 +23,8 @@ window.onload = function(){
   var docs_buttons = document.querySelector('.docs-buttons');
   var docs_toggles = document.querySelector('.docs-toggles');
   var docs_advanced = document.querySelector('.docs-advanced');
+  var dataHeight = document.getElementById('dataHeight');
+  var dataWidth = document.getElementById('dataWidth');
 
   // Oculta opciones de edición de imagen solo deja seleccionar archivo
   docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
@@ -39,7 +41,12 @@ window.onload = function(){
   			cropper.setDragMode("move");
   			cropper.clear();
         // console.log(getImageLive());
-  		}
+  		},
+    crop: function (e){
+        var data = e.detail;
+        dataHeight.value = Math.round(data.height);
+        dataWidth.value = Math.round(data.width);
+      }
   	};
   	arrayImages = [source_image];
 
@@ -221,6 +228,7 @@ window.onload = function(){
 		var e = event || window.event;
 	  	var target = e.target || e.srcElement;
 	  	var data;
+      var recorteRectangular, recorteCuadrado;
       var activeAdvanced = document.querySelector('#activeAdvanced');
 	  	data = {
       		method: target.getAttribute('data-method')
@@ -230,26 +238,29 @@ window.onload = function(){
       			options['aspectRatio'] = NaN;
       			cen = false;
             activeAdvanced.disabled = true;
-            btnCancel.disabled = false;
-
+            activaBotonCancel();
       			break;
           case 'rectangle':
-            options['aspectRatio'] = 16 / 9;
+            // options['aspectRatio'] = 16 / 9;
+            options['aspectRatio'] = 13 / 3;
             cen = false;
             activeAdvanced.disabled = true;
-            btnCancel.disabled = false;
+            activaBotonCancel();
+            recorteRectangular = true;
             break;
       		case 'cuadrado':
       			options['aspectRatio'] = 1 / 1;
       			cen = false;
             activeAdvanced.disabled = true;
-            btnCancel.disabled = false;
+            activaBotonCancel();
+            recorteCuadrado = true;
       			break;
       		case 'circle':
       			options['aspectRatio'] = 1 / 1;
       			cen = true;
             activeAdvanced.disabled = true;
-            btnCancel.disabled = false;
+            activaBotonCancel();
+            recorteCuadrado = true;
       			break;
       		default:
       			console.log('opcion no valida');
@@ -265,6 +276,15 @@ window.onload = function(){
       	options.ready = function(){
       		if (cen) viewCircle();
           image_cropped = getImageLive();
+          if (recorteRectangular) {
+            let datos = {"x":0,"y":0,"width":1300,"height":300,"rotate":0,"scaleX":1,"scaleY":1};
+            cropper.setData(datos);
+          }
+          if (recorteCuadrado) {
+            let datos = {"x":0,"y":0,"width":900,"height":900,"rotate":0,"scaleX":1,"scaleY":1};
+            cropper.setData(datos);
+          }
+          console.log(cropper.crop().cropped);
       	};
       	// Restart
       	cropper.destroy();
@@ -547,6 +567,12 @@ window.onload = function(){
       item.checked = false;
     }
   };
+
+  /** Activa boton cancelar */
+  function activaBotonCancel(){
+    btnCancel.disabled = false;
+    
+  }
 
   /** 
    * Muestra progressbar after crop
