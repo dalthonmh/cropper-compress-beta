@@ -67,14 +67,24 @@ window.onload = function(){
           pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
           pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
   				if (/^image\/\w+/.test(file.type)) {
-  					uploadedImageType = file.type;
-          			uploadedImageName = file.name;
+  					    uploadedImageType = file.type;
+          		  uploadedImageName = file.name;
   					if (uploadedImageURL) {
 	          			URL.revokeObjectURL(uploadedImageURL);
 	          		}
 	          		uploadedImageURL = URL.createObjectURL(file);
 
                 // reader
+                reader.onload = function(){
+                  var image = new Image();
+
+                  image.src = reader.result;
+                  image.onload = function() {
+                      console.log(image.width);
+                      console.log(image.height);
+                  };
+                };
+
                 reader.onloadend = function(){
                   middleImage = reader.result;
 
@@ -313,6 +323,7 @@ window.onload = function(){
     cropImageGenerator(croppedCanvas);
     resetRadio();
     btnCancel.disabled = true;
+    dataHeight.disabled = dataWidth.disabled = true;
     recorte = true; // indica que ha habido almenos un recorte
    }
    else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
