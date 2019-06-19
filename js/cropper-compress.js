@@ -222,6 +222,7 @@ window.onload = function(){
       }
   };
   btnCancel.disabled = true;
+  dataHeight.disabled = dataWidth.disabled = true;
 	// Opciones cropper
 	var actions = document.getElementById('actions');
 	actions.querySelector('.docs-toggles').onchange = function(event){
@@ -238,6 +239,7 @@ window.onload = function(){
       			options['aspectRatio'] = NaN;
       			cen = false;
             activeAdvanced.disabled = true;
+            dataHeight.disabled = dataWidth.disabled = false;
             activaBotonCancel();
       			break;
           case 'rectangle':
@@ -245,6 +247,7 @@ window.onload = function(){
             options['aspectRatio'] = 13 / 3;
             cen = false;
             activeAdvanced.disabled = true;
+            dataHeight.disabled = dataWidth.disabled = false;
             activaBotonCancel();
             recorteRectangular = true;
             break;
@@ -252,6 +255,7 @@ window.onload = function(){
       			options['aspectRatio'] = 1 / 1;
       			cen = false;
             activeAdvanced.disabled = true;
+            dataHeight.disabled = dataWidth.disabled = false;
             activaBotonCancel();
             recorteCuadrado = true;
       			break;
@@ -259,6 +263,7 @@ window.onload = function(){
       			options['aspectRatio'] = 1 / 1;
       			cen = true;
             activeAdvanced.disabled = true;
+            dataHeight.disabled = dataWidth.disabled = false;
             activaBotonCancel();
             recorteCuadrado = true;
       			break;
@@ -400,6 +405,7 @@ window.onload = function(){
   btnCancel.onclick = function () {
   	cropper.clear();
   	this.disabled = true; 
+    dataHeight.disabled = dataWidth.disabled = true;
   	resetRadio();
   	if (btnSaveUpload.innerHTML === 'Cortar') {
   		btnSaveUpload.innerHTML = "Subir";
