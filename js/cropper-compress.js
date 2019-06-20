@@ -293,7 +293,15 @@ window.onload = function(){
             let datos = {"x":0,"y":0,"width":900,"height":900,"rotate":0,"scaleX":1,"scaleY":1};
             cropper.setData(datos);
           }
-          console.log(cropper.crop().cropped);
+          
+          // listener de cambio
+          dataHeight.addEventListener('input', function (){
+            console.log(this.value);
+            let datos = {"x":0,"y":0,"width":1300,"height":this.value,"rotate":0,"scaleX":1,"scaleY":1};
+            cropper.setData(datos);
+          });
+
+
       	};
       	// Restart
       	cropper.destroy();
