@@ -33,7 +33,6 @@ Selecciona una imagen y puedes directamente presionar el boton enviar, la imagen
 ### Options
 - **tipo de recorte**
  Esta muestra las opciones de recorte disponibles.
- nota: con doble click cambias la el modo de arrastre del puntero, tenemos para mover la imagen o para seleccionar área a recortar.
 - **opciones** 
     - Cancelar :  Se habilita cuando esta en modo recorte, cancela la previsualización del recorte
     - Subir :  Sube directamente la imagen al servidor
