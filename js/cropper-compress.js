@@ -37,9 +37,11 @@ window.onload = function(){
 	options = {
 		viewMode: 1,
 		aspectRatio: NaN,
+    toggleDragModeOnDblclick: false,
 		ready: function (event) {
   			cropper.setDragMode("move");
   			cropper.clear();
+
         // console.log(getImageLive());
   		},
     crop: function (e){
@@ -73,18 +75,7 @@ window.onload = function(){
 	          			URL.revokeObjectURL(uploadedImageURL);
 	          		}
 	          		uploadedImageURL = URL.createObjectURL(file);
-
                 // reader
-                reader.onload = function(){
-                  var image = new Image();
-
-                  image.src = reader.result;
-                  image.onload = function() {
-                      console.log(image.width);
-                      console.log(image.height);
-                  };
-                };
-
                 reader.onloadend = function(){
                   middleImage = reader.result;
 
@@ -132,6 +123,7 @@ window.onload = function(){
   		inputImage.disabled = true;
   		inputImage.parentNode.className += ' disabled';
   	};
+
 
   // new cropper
   var cropper = new Cropper(source_image, options);
@@ -188,6 +180,8 @@ window.onload = function(){
       }
     }
   }
+
+
   // muestra salida de datos
   function showResults(image){
     pesoInicialSize = parseFloat(pesoInicialSize);
@@ -415,6 +409,7 @@ window.onload = function(){
   /*boton cancel*/
   btnCancel.onclick = function () {
   	cropper.clear();
+    cropper.setDragMode("move");
   	this.disabled = true; 
     dataHeight.disabled = dataWidth.disabled = true;
   	resetRadio();
@@ -546,6 +541,7 @@ window.onload = function(){
   	arrayImages.push(rectangleImage); // nueva imagen recibida
   	return cropper = new Cropper(arrayImages[arrayImages.length-1], {
   		viewMode: 1,
+      toggleDragModeOnDblclick: false,
   		ready: function (event) {
         cropper.setDragMode("move");
   			cropper.clear();
