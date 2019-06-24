@@ -295,13 +295,17 @@ window.onload = function(){
           }
           
           // listener de cambio
-          dataHeight.addEventListener('input', function (){
-            console.log(this.value);
-            let datos = {"x":0,"y":0,"width":1300,"height":this.value,"rotate":0,"scaleX":1,"scaleY":1};
-            cropper.setData(datos);
-          });
+          // condicional de keydown y blur para poder hacer el cambio del lienzo de recorte
+          dataHeight.addEventListener('blur', cambiaLienzo);
 
-
+          /**
+           * Cambia el valor del lienzo
+           */
+           function cambiaLienzo(){
+              let datos = {"x":0,"y":0,"width":1300,"height":dataHeight.value,"rotate":0,"scaleX":1,"scaleY":1};
+              cropper.setData(datos);
+              console.log(dataHeight.value);
+           }
       	};
       	// Restart
       	cropper.destroy();
@@ -433,7 +437,10 @@ window.onload = function(){
     result_image.src = middleImage;
   }
 
-  //  @Funciones generales
+  /**  
+   *  @Funciones generales
+   *  ---------------------
+   */
 
   /**
    * Revisa si tiene tranparencia
@@ -636,10 +643,13 @@ window.onload = function(){
     }
   }
 
-  
+  // Detecta evento submit de formulario
   document.getElementById('imageInputForm').addEventListener('submit', getRequestPost);
-
+  // Previene que se recarge la pagina
   function getRequestPost(evt){
     evt.preventDefault();
   }
+
+
+
 }
