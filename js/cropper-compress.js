@@ -297,11 +297,21 @@ window.onload = function(){
           // listener de cambio
           // condicional de keydown y blur para poder hacer el cambio del lienzo de recorte
           dataHeight.addEventListener('blur', cambiaLienzo);
+          // dataHeight.addEventListener('onkeydown', cambiaLienzo(e));
+          // dataHeight.onkeydown = function (event){
+          //   var e = event || window.event;
+          //   if (e.keyCode == 13) {
+          //     // console.log('enter');
+          //     cambiaLienzo();
+          //   }
+          // }
+
 
           /**
            * Cambia el valor del lienzo
            */
            function cambiaLienzo(){
+              // console.log(e.keyCode == 13);
               let datos = {"x":0,"y":0,"width":1300,"height":dataHeight.value,"rotate":0,"scaleX":1,"scaleY":1};
               cropper.setData(datos);
               console.log(dataHeight.value);
