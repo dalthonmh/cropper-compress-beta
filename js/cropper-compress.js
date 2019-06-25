@@ -286,36 +286,26 @@ window.onload = function(){
       		if (cen) viewCircle();
           image_cropped = getImageLive();
           if (recorteRectangular) {
-            let datos = {"x":0,"y":0,"width":1300,"height":300,"rotate":0,"scaleX":1,"scaleY":1};
+            let datos = { "x":0,
+                          "y":0,
+                          "width":1300,
+                          "height":300,
+                          "rotate":0,
+                          "scaleX":1,
+                          "scaleY":1};
             cropper.setData(datos);
           }
           if (recorteCuadrado) {
-            let datos = {"x":0,"y":0,"width":900,"height":900,"rotate":0,"scaleX":1,"scaleY":1};
+            let datos = { "x":0,
+                          "y":0,
+                          "width":900,
+                          "height":900,
+                          "rotate":0,
+                          "scaleX":1,
+                          "scaleY":1};
             cropper.setData(datos);
           }
-          
-          // listener de cambio
-          // condicional de keydown y blur para poder hacer el cambio del lienzo de recorte
-          dataHeight.addEventListener('blur', cambiaLienzo);
-          // dataHeight.addEventListener('onkeydown', cambiaLienzo(e));
-          // dataHeight.onkeydown = function (event){
-          //   var e = event || window.event;
-          //   if (e.keyCode == 13) {
-          //     // console.log('enter');
-          //     cambiaLienzo();
-          //   }
-          // }
 
-
-          /**
-           * Cambia el valor del lienzo
-           */
-           function cambiaLienzo(){
-              // console.log(e.keyCode == 13);
-              let datos = {"x":0,"y":0,"width":1300,"height":dataHeight.value,"rotate":0,"scaleX":1,"scaleY":1};
-              cropper.setData(datos);
-              console.log(dataHeight.value);
-           }
       	};
       	// Restart
       	cropper.destroy();
@@ -660,6 +650,20 @@ window.onload = function(){
     evt.preventDefault();
   }
 
-
+ /**
+  * Cambia el valor del lienzo
+  */
+  document.getElementById('btnUpdate').onclick = function(){
+    console.log(dataHeight.value);
+    let datos = { "x":0,
+                  "y":0,
+                  "height":dataHeight.value,
+                  "width":dataWidth.value,
+                  "rotate":0,
+                  "scaleX":1,
+                  "scaleY":1
+                };
+    cropper.getData();
+  }
 
 }
