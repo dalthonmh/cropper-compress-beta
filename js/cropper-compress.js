@@ -83,15 +83,15 @@ window.onload = function(){
                    *  Muestra interfaz dependiendo del tipo de imagen con jpg se
                    *  muestra todo con png se muestra las opciones avanzadas pero 
                    *  no puede alterar la calidad.
-                   *  formatos admitidos jpg, jpeg, png, gif, webp.
+                   *  formatos admitidos jpg, jpeg, png, gif, svg, webp.
                    */
 
                   // detecta valor de file.type
                   docs_toggles.style.display = docs_buttons.style.display = 'block';
                   
-                  if (file.type === 'image/jpg' || file.type === 'image/jpeg' || !hasAlphaValue) {
+                  // if (file.type === 'image/jpg' || file.type === 'image/jpeg' || !hasAlphaValue) {
                     docs_advanced.style.display = 'block';
-                  }
+                  // }
                   
                 }
 
@@ -140,7 +140,7 @@ window.onload = function(){
   // again click
   activeAdvanced.onclick = function (){
 
-    let cen = activeAdvanced.checked; // guarda si esta checked o no
+    let activeAdvancedChecked = activeAdvanced.checked; // guarda si esta checked o no
     let advanced = document.querySelector('.advanced');
     advanced.classList.toggle("d-none");
     var pesoFinal = document.querySelector('#pesoFinal');
@@ -150,15 +150,19 @@ window.onload = function(){
     let inputRadio = document.querySelectorAll('input[type=radio]');
     
 
-    if (cen) {
+    if (activeAdvancedChecked) {
+
       activeAdvancedMessage.innerHTML = 'Listo'; 
       for (var item of inputRadio) {
         item.disabled = true;
       }
       /** Imagen recortada. */
       result_image.src = getImageLive().src; // esto se da como valor inicial
+      
+      console.log(result_image);
       var image = imageCompress(result_image); // compresion de imagen
 
+      console.log(image);
       showResults(image);
 
       // Vanilla JS jic function when input range change
@@ -648,22 +652,6 @@ window.onload = function(){
   // Previene que se recarge la pagina
   function getRequestPost(evt){
     evt.preventDefault();
-  }
-
- /**
-  * Cambia el valor del lienzo
-  */
-  document.getElementById('btnUpdate').onclick = function(){
-    console.log(dataHeight.value);
-    let datos = { "x":0,
-                  "y":0,
-                  "height":dataHeight.value,
-                  "width":dataWidth.value,
-                  "rotate":0,
-                  "scaleX":1,
-                  "scaleY":1
-                };
-    cropper.getData();
   }
 
 }
