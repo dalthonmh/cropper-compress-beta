@@ -4,8 +4,8 @@
 window.onload = function(){
 	'use strict';
 
-	/** Variables globales */
-	var source_image = document.getElementById('source_image');
+  /** Variables globales */
+  var source_image = document.getElementById('source_image');
   var result_image = document.getElementById('result_image');
   var containerImage = document.getElementById('containerImage');
   var URL = window.URL || window.webkitURL;
@@ -37,7 +37,7 @@ window.onload = function(){
 	options = {
 		viewMode: 1,
 		aspectRatio: NaN,
-    toggleDragModeOnDblclick: false,
+    	toggleDragModeOnDblclick: false,
 		ready: function (event) {
   			cropper.setDragMode("move");
   			cropper.clear();
@@ -57,8 +57,8 @@ window.onload = function(){
   	if (URL) {
   		inputImage.onchange = function(e){
         let pesoInicialShow = document.getElementById('pesoInicial');
-  			let files = this.files;
-  			let file;
+		let files = this.files;
+		let file;
         var input = e.target;
         var reader = new FileReader();
         var readerPng = new FileReader();
@@ -104,7 +104,6 @@ window.onload = function(){
                 };
                 readerPng.readAsArrayBuffer(input.files[0]);
                 
-
                 if (file) {
                   reader.readAsDataURL(file);
                 }
@@ -140,7 +139,7 @@ window.onload = function(){
   // again click
   activeAdvanced.onclick = function (){
 
-    let activeAdvancedChecked = activeAdvanced.checked; // guarda si esta checked o no
+    // guarda si esta checked o no
     let advanced = document.querySelector('.advanced');
     advanced.classList.toggle("d-none");
     var pesoFinal = document.querySelector('#pesoFinal');
@@ -150,9 +149,9 @@ window.onload = function(){
     let inputRadio = document.querySelectorAll('input[type=radio]');
     
 
-    if (activeAdvancedChecked) {
+    if (activeAdvanced.checked) {
 
-      activeAdvancedMessage.innerHTML = 'Listo'; 
+      activeAdvancedMessage.innerHTML = 'Listo';
       for (var item of inputRadio) {
         item.disabled = true;
       }
