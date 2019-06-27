@@ -139,7 +139,6 @@ window.onload = function(){
   // again click
   activeAdvanced.onclick = function (){
 
-    // guarda si esta checked o no
     let advanced = document.querySelector('.advanced');
     advanced.classList.toggle("d-none");
     var pesoFinal = document.querySelector('#pesoFinal');
@@ -148,6 +147,9 @@ window.onload = function(){
 
     let inputRadio = document.querySelectorAll('input[type=radio]');
     
+ 	/** Imagen recortada. */
+    result_image.src = getImageLive().src; // esto se da como valor inicial
+    var image = imageCompress(result_image); // compresion de imagen
 
     if (activeAdvanced.checked) {
 
@@ -155,13 +157,7 @@ window.onload = function(){
       for (var item of inputRadio) {
         item.disabled = true;
       }
-      /** Imagen recortada. */
-      result_image.src = getImageLive().src; // esto se da como valor inicial
-      
-      console.log(result_image);
-      var image = imageCompress(result_image); // compresion de imagen
 
-      console.log(image);
       showResults(image);
 
       // Vanilla JS jic function when input range change
