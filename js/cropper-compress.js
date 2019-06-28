@@ -1,6 +1,11 @@
 /** 
  * CropperCompress v1.0.0
+ * ----------------------
+ * created: 02/05/2019
+ * https://gitlab.com/D4ITON/cropper-compress.git
+ * licence: GNU General Public License v3.0.
  */
+
 window.onload = function(){
 	'use strict';
 
@@ -25,12 +30,23 @@ window.onload = function(){
   var docs_advanced = document.querySelector('.docs-advanced');
   var dataHeight = document.getElementById('dataHeight');
   var dataWidth = document.getElementById('dataWidth');
+  var btnGoBack = document.getElementById('btnGoBack');
+
+  /** 
+   *  Oculta los elementos de la interfaz
+   */
 
   // Oculta opciones de edición de imagen solo deja seleccionar archivo
-  docs_advanced.style.display = docs_buttons.style.display = docs_toggles.style.display = 'none';
+  docs_advanced.style.display 	= 
+  docs_buttons.style.display 	= 
+  docs_toggles.style.display 	= 'none';
+  btnGoBack.style.display = 'none';
 
+  /**
+   * Inicialización de cropper.js
+   */
   var uploadedImageName = 'cropped.jpg';
-	var uploadedImageType = 'image/jpeg';
+  var uploadedImageType = 'image/jpeg';
 
 
 	// Initialize options de cropper
@@ -44,56 +60,65 @@ window.onload = function(){
 
         // console.log(getImageLive());
   		},
-    crop: function (e){
-        var data = e.detail;
-        dataHeight.value = Math.round(data.height);
-        dataWidth.value = Math.round(data.width);
-      }
+    	crop: function (e){
+        	var data = e.detail;
+        	dataHeight.value = Math.round(data.height);
+        	dataWidth.value = Math.round(data.width);
+      	}
   	};
   	arrayImages = [source_image];
 
   	// cargar imagen
   	var inputImage = document.querySelector('#inputImage');
   	if (URL) {
+  		/** Boton inputImage
+	     *  Este botón carga la imagen
+	     */
   		inputImage.onchange = function(e){
-        let pesoInicialShow = document.getElementById('pesoInicial');
-		let files = this.files;
-		let file;
-        var input = e.target;
-        var reader = new FileReader();
-        var readerPng = new FileReader();
-        fileImagen = files[0];
 
-  			if (cropper && files && files.length) {
+  			btnGoBack.style.display = 'block';
+
+	        let pesoInicialShow = document.getElementById('pesoInicial');
+			let files = this.files;
+			let file;
+	        var input = e.target;
+	        var reader = new FileReader();
+	        var readerPng = new FileReader();
+	        fileImagen = files[0];
+
+	  		if (cropper && files && files.length) {
   				file = files[0];
-          pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
-          pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
+          		pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
+          		pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
   				if (/^image\/\w+/.test(file.type)) {
   					    uploadedImageType = file.type;
-          		  uploadedImageName = file.name;
+          		  		uploadedImageName = file.name;
   					if (uploadedImageURL) {
 	          			URL.revokeObjectURL(uploadedImageURL);
 	          		}
 	          		uploadedImageURL = URL.createObjectURL(file);
-                // reader
-                reader.onloadend = function(){
-                  middleImage = reader.result;
+                	// reader
+                	reader.onloadend = function(){
+                  	  middleImage = reader.result;
 
-                  /** 
-                   *  Muestra interfaz dependiendo del tipo de imagen con jpg se
-                   *  muestra todo con png se muestra las opciones avanzadas pero 
-                   *  no puede alterar la calidad.
-                   *  formatos admitidos jpg, jpeg, png, gif, svg, webp.
-                   */
+	                  /** 
+	                   *  Muestra interfaz dependiendo del tipo de imagen con jpg se
+	                   *  muestra todo con png se muestra las opciones avanzadas pero 
+	                   *  no puede alterar la calidad.
+	                   *  formatos admitidos jpg, jpeg, png, gif, svg, webp.
+	                   */
 
-                  // detecta valor de file.type
-                  docs_toggles.style.display = docs_buttons.style.display = 'block';
+	                  // detecta valor de file.type
+	                  docs_toggles.style.display = docs_buttons.style.display = 'block';
+	                  
+	                  // if (file.type === 'image/jpg' || file.type === 'image/jpeg' || !hasAlphaValue) {
+	                  docs_advanced.style.display = 'block';
+	                  // }
+
+	                  // escuende boton input file para que ya no se carge otra imagen
+	                  inputImage.style.display = 'none';
                   
-                  // if (file.type === 'image/jpg' || file.type === 'image/jpeg' || !hasAlphaValue) {
-                    docs_advanced.style.display = 'block';
-                  // }
-                  
-                }
+                	}
 
                 // readerPng
                 readerPng.onload = function(){
@@ -117,6 +142,24 @@ window.onload = function(){
   					window.alert('Por favor escoje un archivo tipo imagen.');
   				}
   			}
+
+  			  /** Boton Regresar
+			   *  Este botón hace que se quite la imagen que se esta editando y pueda insertar otra
+			   */
+			  btnGoBack.onclick = function () {
+			  	this.style.display = 'none';
+			  	inputImage.style.display = 'block';
+
+			  	// resetea imagen cargada
+			  	// console.log(fileImagen);
+			  	console.log(arrayImages);
+			  	arrayImages = [];
+			  	console.log(arrayImages);
+
+			  	cropper.destroy();
+			  	source_image.style.display = 'none';
+			  }
+
   		}
   	} else {
   		inputImage.disabled = true;
@@ -318,18 +361,18 @@ window.onload = function(){
   btnSaveUpload.onclick = async function(){
 
    if (this.innerHTML === "Cortar") {
-    this.innerHTML = "Subir";
-    this.style.background = '#1A73E8';
-    this.style.color = 'white';
-    /* hacer el recorte */
-    var croppedCanvas;
-    croppedCanvas = cropper.getCroppedCanvas();
-    if (cen) croppedCanvas = getRoundedCanvas(croppedCanvas);
-    cropImageGenerator(croppedCanvas);
-    resetRadio();
-    btnCancel.disabled = true;
-    dataHeight.disabled = dataWidth.disabled = true;
-    recorte = true; // indica que ha habido almenos un recorte
+	    this.innerHTML = "Subir";
+	    this.style.background = '#1A73E8';
+	    this.style.color = 'white';
+	    /* hacer el recorte */
+	    var croppedCanvas;
+	    croppedCanvas = cropper.getCroppedCanvas();
+	    if (cen) croppedCanvas = getRoundedCanvas(croppedCanvas);
+	    cropImageGenerator(croppedCanvas);
+	    resetRadio();
+	    btnCancel.disabled = true;
+	    dataHeight.disabled = dataWidth.disabled = true;
+	    recorte = true; // indica que ha habido almenos un recorte
    }
    else if(this.innerHTML === "Subir"  || this.innerHTML === "uno más"){
     /** Opcion subir
@@ -417,7 +460,14 @@ window.onload = function(){
    } // fin boton subir
 
   }
-  /*boton cancel*/
+  /**  
+   *  @Botones
+   *  ---------
+   */
+
+  /** Boton cancel
+   *  Este botón hace cuando esta activo el lienzo de recorte, lo cancele y se pueda subir la imagen
+   */
   btnCancel.onclick = function () {
   	cropper.clear();
     cropper.setDragMode("move");
@@ -431,10 +481,14 @@ window.onload = function(){
   	}
   };
 
-
+  /** 
+   *  Función de apoyo para igualar valor
+   */
   function resultImageMiddleImage(){
     result_image.src = middleImage;
   }
+
+
 
   /**  
    *  @Funciones generales
