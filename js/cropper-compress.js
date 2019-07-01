@@ -84,60 +84,40 @@ window.onload = function(){
 	        var input = e.target;
 	        var reader = new FileReader();
 	        var readerPng = new FileReader();
+	        var newReader = new FileReader();
 	        fileImagen = files[0];
 
 	  		if (cropper && files && files.length) {
   				file = files[0];
+  				console.log(file); // muestra la imagen actual que esta cargada
           		pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
           		pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
   				if (/^image\/\w+/.test(file.type)) {
-  					    uploadedImageType = file.type;
-          		  		uploadedImageName = file.name;
-  					if (uploadedImageURL) {
-	          			URL.revokeObjectURL(uploadedImageURL);
-	          		}
+				    uploadedImageType = file.type;
+      		  		uploadedImageName = file.name;
+  					if (uploadedImageURL) URL.revokeObjectURL(uploadedImageURL);
 	          		uploadedImageURL = URL.createObjectURL(file);
                 	// reader
                 	reader.onloadend = function(){
                   	  middleImage = reader.result;
-
-	                  /** 
-	                   *  Muestra interfaz dependiendo del tipo de imagen con jpg se
-	                   *  muestra todo con png se muestra las opciones avanzadas pero 
-	                   *  no puede alterar la calidad.
-	                   *  formatos admitidos jpg, jpeg, png, gif, svg, webp.
-	                   */
-
-	                  // detecta valor de file.type
 	                  docs_toggles.style.display = docs_buttons.style.display = 'block';
-	                  
-	                  // if (file.type === 'image/jpg' || file.type === 'image/jpeg' || !hasAlphaValue) {
 	                  docs_advanced.style.display = 'block';
-	                  // }
-
-	                  // escuende boton input file para que ya no se carge otra imagen
 	                  inputImage.style.display = 'none';
-                  
                 	}
-
-                // readerPng
-                readerPng.onload = function(){
-                  if(file.type === 'image/png'){
-                    var arrayBuffer = readerPng.result;
-                    hasAlphaValue = isTransparent(arrayBuffer).hasAlpha;
-                  }
-                };
-                readerPng.readAsArrayBuffer(input.files[0]);
-                
-                if (file) {
-                  reader.readAsDataURL(file);
-                }
-
-                source_image.src = uploadedImageURL; // esto muestra la imagen
+	                // readerPng
+	                readerPng.onload = function(){
+	                  if(file.type === 'image/png'){
+	                    var arrayBuffer = readerPng.result;
+	                    hasAlphaValue = isTransparent(arrayBuffer).hasAlpha;
+	                  }
+	                };
+	                readerPng.readAsArrayBuffer(input.files[0]);
+	                if (file) reader.readAsDataURL(file);
+	            	source_image.src = uploadedImageURL; // esto muestra la imagen
+	            	console.log(source_image);
 	          		cropper.destroy();
-
 	          		cropper = new Cropper(source_image, options);
-	          		inputImage.value = null;
+	          		inputImage.value = "";
   				} else {
   					window.alert('Por favor escoje un archivo tipo imagen.');
   				}
@@ -149,15 +129,25 @@ window.onload = function(){
 			  btnGoBack.onclick = function () {
 			  	this.style.display = 'none';
 			  	inputImage.style.display = 'block';
-
-			  	// resetea imagen cargada
-			  	// console.log(fileImagen);
-			  	console.log(arrayImages);
-			  	arrayImages = [];
-			  	console.log(arrayImages);
-
+			  	console.log(file); // muestra la imagen actual que esta cargada
 			  	cropper.destroy();
 			  	source_image.style.display = 'none';
+			  	source_image.setAttribute("src", "");
+			  	console.log(recorte);
+			  	if (recorte) {
+			  		console.log(arrayImages);
+			  		document.getElementById('source_image').style.display = 'none';
+			  		source_image.setAttribute("src", "");
+			  		containerImage.innerHTML = 
+				  	`
+				        <img id="source_image" crossorigin="anonymous" src="">
+						<img id="result_image" style="display: none;" crossorigin="anonymous" src="">
+				    `;
+			  		arrayImages = [source_image];
+			  	}
+			  	docs_advanced.style.display 	= 
+				docs_buttons.style.display 		= 
+				docs_toggles.style.display 		= 'none';
 			  }
 
   		}
@@ -275,17 +265,19 @@ window.onload = function(){
 		var e = event || window.event;
 	  	var target = e.target || e.srcElement;
 	  	var data;
-      var recorteRectangular, recorteCuadrado;
-      var activeAdvanced = document.querySelector('#activeAdvanced');
+      	var recorteRectangular, recorteCuadrado;
+
+      	var activeAdvanced = document.querySelector('#activeAdvanced');
 	  	data = {
       		method: target.getAttribute('data-method')
       	}
       	switch (data.method) {
       		case 'libre':
       			options['aspectRatio'] = NaN;
+      			console.log(arrayImages);
       			cen = false;
-            activeAdvanced.disabled = true;
-            activaBotonCancel();
+            	activeAdvanced.disabled = true;
+            	activaBotonCancel();
       			break;
           case 'rectangle':
             // options['aspectRatio'] = 16 / 9;
@@ -407,40 +399,17 @@ window.onload = function(){
     }else{
       // si hubo recorte
       image = getImageLive();
-
       // si no tiene tranparencia (jpg)
       if (!hasAlphaValue) {
         image = imageCompress(image);
         isBase64(image.src);
         formatoBase64 = image.src.substr(0,10);
         muestraProgressBar(formatoBase64);
-        // console.log(image.src);
-        // // creacion de canvas
-        // var canvas = document.createElement('canvas');
-        // var ctx = canvas.getContext('2d');
-
-        // var cw = canvas.width;
-        // var ch = canvas.height;
-
-        // var img = new Image();
-        // img.onload = function(){
-        //   ctx.drawImage(img, 0, 0);
-        //   cw = image.img.naturalWidth;
-        //   ch = image.img.naturalHeight;
-        //   ctx.globalCompositeOperation='destination-in';
-        //   ctx.beginPath();
-        //   ctx.arc(cw/2,ch/2,ch/2,0,Math.PI*2);
-        //   ctx.closePath();
-        //   ctx.fill();
-        // }
-        // console.log(canvas.toDataURL());
-
       }else{
         // si tiene tranparencia
         let srcFile = await srcToFile(image.src, 'new.png', 'image/png');
         var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
         var output = await imageCompression(srcFile, options);
-        // console.log(output);
         // blob to base64
         var reader = new FileReader();
          reader.readAsDataURL(output); 
@@ -451,7 +420,6 @@ window.onload = function(){
            muestraProgressBar(formatoBase64);
         }
       }
-      
     }
    } // fin boton subir
 
@@ -599,7 +567,7 @@ window.onload = function(){
   	let rectangleImage;
   	rectangleImage = document.createElement('img');
   	rectangleImage.src = croppedCanvas.toDataURL();
-  	rectangleImage.id = 'image';
+  	rectangleImage.id = 'source_image';
   	containerImage.innerHTML = '';
   	containerImage.appendChild(rectangleImage);
   	arrayImages.push(rectangleImage); // nueva imagen recibida
