@@ -176,12 +176,13 @@ window.onload = function(){
     // again click
     activeAdvanced.onclick = function (){
 
-        advanced.classList.toggle("d-none");
         var quality = document.querySelector('#quality');
         let advanced = document.querySelector('.advanced');
         var pesoFinal = document.querySelector('#pesoFinal');
         let inputRadio = document.querySelectorAll('input[type=radio]');
         var activeAdvancedMessage = document.querySelector('#activeAdvancedMessage');
+        
+        advanced.classList.toggle("d-none");
     
         /** Imagen recortada. */
         result_image.src = getImageLive().src; // esto se da como valor inicial
