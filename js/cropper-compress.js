@@ -29,6 +29,8 @@ window.onload = function(){
     var btnGoBack = document.getElementById('btnGoBack');
     var btnCancel = document.getElementById('btnCancel');
     var dataHeight = document.getElementById('dataHeight');
+    var widthImage = document.getElementById('widthImage');
+    var heightImage = document.getElementById('heightImage');
     var docs_buttons = document.querySelector('.docs-buttons');
     var docs_toggles = document.querySelector('.docs-toggles');
     var docs_advanced = document.querySelector('.docs-advanced');
@@ -63,8 +65,14 @@ window.onload = function(){
         },
         crop: function (e) {
             var data = e.detail;
-            dataHeight.value = Math.round(data.height);
-            dataWidth.value  = Math.round(data.width);
+            var cropperDataWidth = Math.round(data.width);
+            var cropperDataHeight = Math.round(data.height);
+                dataWidth.innerHTML  = cropperDataWidth;
+                if (cropperDataWidth !== 0) {
+                    dataWidth.value  = cropperDataWidth;
+                }
+                dataHeight.innerHTML = cropperDataHeight;
+                console.log(Math.round(data.width));
         }
   	};
   	arrayImages = [source_image];
@@ -86,6 +94,7 @@ window.onload = function(){
             var reader = new FileReader();
             var readerPng = new FileReader();
             var newReader = new FileReader();
+            var readerSize = new FileReader();
             fileImagen = files[0];
 
     	  	if (cropper && files && files.length) {
@@ -99,13 +108,28 @@ window.onload = function(){
                     uploadedImageName = file.name;
                     if (uploadedImageURL) URL.revokeObjectURL(uploadedImageURL);
                     uploadedImageURL = URL.createObjectURL(file);
+                    // readerSize
+                    readerSize.onload = function(){
+                        var actualImg = new Image();
+                        actualImg.src = readerSize.result;
+                        actualImg.onload = function(){
+                            console.log(actualImg.width, actualImg.height);
+                            dataWidth.value = actualImg.width;
+                            dataHeight.value = actualImg.height;
+                            // comentario
+                            widthImage.innerHTML = actualImg.width;
+                            heightImage.innerHTML = actualImg.height;
+                            console.log(dataWidth.value);
+                        };
+                    };
+                    readerSize.readAsDataURL(file);
                     // reader
                     reader.onloadend = function(){
                         middleImage = reader.result;
                         docs_toggles.style.display  = 
                         docs_buttons.style.display  = 
                         docs_advanced.style.display = 'block';
-    	                inputImage.style.display = 'none';
+    	                inputImage.style.display    = 'none';
                     }
     	            // readerPng
     	            readerPng.onload = function(){
@@ -140,12 +164,12 @@ window.onload = function(){
                 if (recorte) {
                     console.log(arrayImages);
                     document.getElementById('source_image').style.display = 'none';
-                    source_image.setAttribute("src", "");
-                    containerImage.innerHTML = 
-    				`
-    				    <img id="source_image" crossorigin="anonymous" src="">
-    				    <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
-    				`;
+        //             source_image.setAttribute("src", "");
+        //             containerImage.innerHTML = 
+    				// `
+    				//     <img id="source_image" crossorigin="anonymous" src="">
+    				//     <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
+    				// `;
     			  	arrayImages = [source_image];
     			}
                 docs_advanced.style.display 	= 
