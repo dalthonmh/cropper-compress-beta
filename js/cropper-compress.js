@@ -199,6 +199,8 @@ window.onload = function(){
             for (var item of inputRadio) {
                 item.disabled = true;
             }
+            result_image.src = middleImage;
+            var image = imageCompress(result_image);
             showResults(image);
             // Vanilla JS jic function when input range change
             inputRangeCalidad.onchange = function(){
