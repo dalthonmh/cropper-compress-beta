@@ -29,8 +29,6 @@ window.onload = function(){
     var btnGoBack = document.getElementById('btnGoBack');
     var btnCancel = document.getElementById('btnCancel');
     var dataHeight = document.getElementById('dataHeight');
-    var widthImage = document.getElementById('widthImage');
-    var heightImage = document.getElementById('heightImage');
     var docs_buttons = document.querySelector('.docs-buttons');
     var docs_toggles = document.querySelector('.docs-toggles');
     var docs_advanced = document.querySelector('.docs-advanced');
@@ -52,7 +50,6 @@ window.onload = function(){
     var uploadedImageType = 'image/jpeg';
     var uploadedImageName = 'cropped.jpg';
 
-
 	// Initialize options de cropper
     options = {
         viewMode: 1,
@@ -63,17 +60,6 @@ window.onload = function(){
       		cropper.clear();
             // console.log(getImageLive());
         },
-        crop: function (e) {
-            var data = e.detail;
-            var cropperDataWidth = Math.round(data.width);
-            var cropperDataHeight = Math.round(data.height);
-                dataWidth.innerHTML  = cropperDataWidth;
-                if (cropperDataWidth !== 0) {
-                    dataWidth.value  = cropperDataWidth;
-                }
-                dataHeight.innerHTML = cropperDataHeight;
-                console.log(Math.round(data.width));
-        }
   	};
   	arrayImages = [source_image];
 
@@ -116,10 +102,6 @@ window.onload = function(){
                             console.log(actualImg.width, actualImg.height);
                             dataWidth.value = actualImg.width;
                             dataHeight.value = actualImg.height;
-                            // comentario
-                            widthImage.innerHTML = actualImg.width;
-                            heightImage.innerHTML = actualImg.height;
-                            console.log(dataWidth.value);
                         };
                     };
                     readerSize.readAsDataURL(file);
@@ -164,8 +146,8 @@ window.onload = function(){
                 if (recorte) {
                     console.log(arrayImages);
                     document.getElementById('source_image').style.display = 'none';
-        //             source_image.setAttribute("src", "");
-        //             containerImage.innerHTML = 
+                    // source_image.setAttribute("src", "");
+                    // containerImage.innerHTML = 
     				// `
     				//     <img id="source_image" crossorigin="anonymous" src="">
     				//     <img id="result_image" style="display: none;" crossorigin="anonymous" src="">
@@ -242,6 +224,7 @@ window.onload = function(){
     // muestra salida de datos
     function showResults(image){
         pesoInicialSize = parseFloat(pesoInicialSize);
+        console.log(image.size);
         pesoFinal.innerHTML = image.size + " Kb";
         let variacionPeso = Math.abs(100 - parseInt(100 * image.size / pesoInicialSize));
         if (image.size <= pesoInicialSize) {
@@ -340,6 +323,12 @@ window.onload = function(){
         btnSaveUpload.style.color = '#1A73E8';
         btnSaveUpload.style.fontWeight = 'bold';
         btnSaveUpload.style.background = 'white';
+
+        options.crop = function(e){
+            var data = e.detail;
+            dataWidth.value = Math.round(data.width);
+            dataHeight.value = Math.round(data.height);
+        };
 
         options.ready = function(){
             if (cen) viewCircle();
@@ -473,6 +462,8 @@ window.onload = function(){
             btnSaveUpload.style.background = '#1A73E8';
             btnSaveUpload.style.color = 'white';
         }
+        dataWidth.value = getImageLive().naturalWidth;
+        dataHeight.value = getImageLive().naturalHeight;
     };
 
     /** 
