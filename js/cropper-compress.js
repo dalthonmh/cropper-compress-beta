@@ -180,7 +180,7 @@ window.onload = function(){
     });
 
     // again click
-    activeAdvanced.onclick = function (){
+    activeAdvanced.onclick = async function (){
 
         var quality = document.querySelector('#quality');
         let advanced = document.querySelector('.advanced');
@@ -199,21 +199,37 @@ window.onload = function(){
             for (var item of inputRadio) {
                 item.disabled = true;
             }
-            result_image.src = middleImage;
-            var image = imageCompress(result_image);
-            showResults(image);
-            // Vanilla JS jic function when input range change
-            inputRangeCalidad.onchange = function(){
-                image = imageCompress(result_image);
-                setImageLive(image.src); // esto actualiza la imagen a ser optimizada
+            // si es un PNG con transparencia
+            if (hasAlphaValue) {
+                inputNumberCalidad.disabled =inputRangeCalidad.disabled = true
+                let srcFile = await srcToFile(result_image.src, 'new.png', 'image/png');
+                var options = { maxSizeMB: 1, maxWidthOrHeight: 720, useWebWorker: false }
+                var output = await imageCompression(srcFile, options);
+                // blob to base64
+                var reader = new FileReader();
+                reader.readAsDataURL(output); 
+                reader.onloadend = function() {
+                    let base64Output = reader.result;
+                    showResultPNG(base64Output);
+                }
+            }else{
+                result_image.src = middleImage;
+                var image = imageCompress(result_image);
                 showResults(image);
+                // Vanilla JS jic function when input range change
+                inputRangeCalidad.onchange = function(){
+                    image = imageCompress(result_image);
+                    setImageLive(image.src); // esto actualiza la imagen a ser optimizada
+                    showResults(image);
+                }
+
+                inputNumberCalidad.addEventListener('input', function(){
+                    image = imageCompress(result_image);
+                    setImageLive(image.src); // esto actualiza la imagen a ser optimizada
+                    showResults(image);
+                });
             }
 
-            inputNumberCalidad.addEventListener('input', function(){
-                image = imageCompress(result_image);
-                setImageLive(image.src); // esto actualiza la imagen a ser optimizada
-                showResults(image);
-            });
         }else{
             activeAdvancedMessage.innerHTML = 'Activar';
             for (var item of inputRadio) {
@@ -223,25 +239,6 @@ window.onload = function(){
     }
 
 
-    // muestra salida de datos
-    function showResults(image){
-        pesoInicialSize = parseFloat(pesoInicialSize);
-        console.log(image.size);
-        pesoFinal.innerHTML = image.size + " Kb";
-        let variacionPeso = Math.abs(100 - parseInt(100 * image.size / pesoInicialSize));
-        if (image.size <= pesoInicialSize) {
-            quality.classList.add('text-success');
-            quality.classList.remove('text-danger');
-            quality.innerHTML = variacionPeso + " % " + "más pequeño";
-        }else{
-                quality.classList.add('text-danger');
-                quality.classList.remove('text-success');
-                quality.innerHTML = variacionPeso + " % " + "más grande";
-        }
-    }
-
-    // identation
-  
     // Inicialización JIC
     var inputNumberCalidad = document.getElementById('inputNumberCalidad');
     var inputRangeCalidad = document.getElementById('inputRangeCalidad');
@@ -405,6 +402,7 @@ window.onload = function(){
                         base64Output = reader.result;
                         isBase64(base64Output);
                         formatoBase64 = base64Output.substr(0,10);
+                        console.log('png1 ', base64Output);
                         muestraProgressBar(formatoBase64);
                     }
 
@@ -436,8 +434,9 @@ window.onload = function(){
                     reader.readAsDataURL(output); 
                     reader.onloadend = function() {
                         base64Output = reader.result;
-                        formatoBase64 = base64Output.substr(0,10);                
+                        formatoBase64 = base64Output.substr(0,10);
                         isBase64(base64Output);
+                        console.log('png2 ', base64Output);
                         muestraProgressBar(formatoBase64);
                     }
                 }
@@ -480,6 +479,47 @@ window.onload = function(){
      *  @Funciones generales
      *  ---------------------
      */
+
+    /** 
+     * Muestra salida de datos
+     * @param {image HTML} archivo de imagen a ser analizada
+     * @callback {muestraCaracteristicas} muestra resultados html
+     */
+    function showResults(image){
+        muestraCaracteristicas(image.size);
+    }
+
+    /** 
+     * Muestra el peso de la imagen PNG
+     * @param {base64} imageSRC - formato de imagen base 64 
+     * @callback {muestraCaracteristicas} muestra resultados html
+     */
+    function showResultPNG(imageSRC){
+        let base64str = imageSRC.substr(22);
+        let decoded = atob(base64str);
+        let pesoFinalPNG = parseFloat(decoded.length.toLocaleString());
+        muestraCaracteristicas(pesoFinalPNG);
+    }
+
+    /** 
+     * Muestra caracteristicas al activar el checkbox
+     * @param {float} pesoFinalSize - peso final en kb
+     * @return {actions} muestra resultados html
+     */
+    function muestraCaracteristicas(pesoFinalSize){
+        pesoInicialSize = parseFloat(pesoInicialSize);
+        pesoFinal.innerHTML = pesoFinalSize + " Kb";
+        let variacionPeso = Math.abs(100 - parseInt(100 * pesoFinalSize / pesoInicialSize));
+        if (pesoFinalSize <= pesoInicialSize) {
+            quality.classList.add('text-success');
+            quality.classList.remove('text-danger');
+            quality.innerHTML = variacionPeso + " % " + "más pequeño";
+        }else{
+                quality.classList.add('text-danger');
+                quality.classList.remove('text-success');
+                quality.innerHTML = variacionPeso + " % " + "más grande";
+        }
+    }
 
     /**
      * Revisa si tiene tranparencia
@@ -548,6 +588,7 @@ window.onload = function(){
 
         let src = output_image.src;
         let base64str = src.substr(23);
+        // console.log(base64str);
         let decoded = atob(base64str);
 
         let fileSizeCompressed = parseFloat(decoded.length.toLocaleString());
