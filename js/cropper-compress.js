@@ -31,6 +31,7 @@ window.onload = function(){
     var dataHeight = document.getElementById('dataHeight');
     var docs_buttons = document.querySelector('.docs-buttons');
     var docs_toggles = document.querySelector('.docs-toggles');
+    var downloadImage = document.getElementById('downloadImage');
     var docs_advanced = document.querySelector('.docs-advanced');
 
 
@@ -214,6 +215,7 @@ window.onload = function(){
                 }
             }else{
                 result_image.src = middleImage;
+                if (recorte) result_image.src = getImageLive().src; // esto se da como valor inicial
                 var image = imageCompress(result_image);
                 showResults(image);
                 // Vanilla JS jic function when input range change
@@ -402,7 +404,6 @@ window.onload = function(){
                         base64Output = reader.result;
                         isBase64(base64Output);
                         formatoBase64 = base64Output.substr(0,10);
-                        console.log('png1 ', base64Output);
                         muestraProgressBar(formatoBase64);
                     }
 
