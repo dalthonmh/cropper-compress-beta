@@ -22,6 +22,7 @@ window.onload = function(){
     var image_cropped;
     var hasAlphaValue; // obtiene tranparencia de la imagenç
     var pesoInicialSize; // peso inicial variable para hacer calculos
+    var fileNameImage; // it have the name of the imagen when this is ready
 
 
     // Variables para interfaz
@@ -31,7 +32,6 @@ window.onload = function(){
     var dataHeight = document.getElementById('dataHeight');
     var docs_buttons = document.querySelector('.docs-buttons');
     var docs_toggles = document.querySelector('.docs-toggles');
-    var downloadImage = document.getElementById('downloadImage');
     var docs_advanced = document.querySelector('.docs-advanced');
 
 
@@ -87,6 +87,7 @@ window.onload = function(){
     	  	if (cropper && files && files.length) {
                 file = files[0];
       			console.log(file); // muestra la imagen actual que esta cargada
+      			fileNameImage = file.name;
                 pesoInicialSize = (parseInt(file.size) / 1024).toFixed(3);
                 pesoInicialShow.innerHTML = pesoInicialSize + " Kb";
 
@@ -389,6 +390,7 @@ window.onload = function(){
             var image; // imagen a ser compresa
             var base64Output; // string de salida de imagen
             var formatoBase64; // verifica si tiene formato base 64
+            var formatoBase64Validado; // recibe base64 solo si es valido
 
             // comparar si no tuvo recorte
             if (!recorte) {
@@ -402,9 +404,10 @@ window.onload = function(){
                     reader.readAsDataURL(output); 
                     reader.onloadend = function() {
                         base64Output = reader.result;
-                        isBase64(base64Output);
+                        // isBase64(base64Output);
+                        formatoBase64Validado = isBase64(base64Output);
                         formatoBase64 = base64Output.substr(0,10);
-                        muestraProgressBar(formatoBase64);
+                        muestraProgressBar(formatoBase64, formatoBase64Validado);
                     }
 
                 }else {
@@ -412,9 +415,10 @@ window.onload = function(){
                     image = imageCompress(result_image);
                     resultImageMiddleImage();
                     base64Output = image.src;
-                    isBase64(base64Output);
+                    // isBase64(base64Output);
+                    formatoBase64Validado = isBase64(base64Output);
                     formatoBase64 = base64Output.substr(0,10);
-                    muestraProgressBar(formatoBase64);
+                    muestraProgressBar(formatoBase64, formatoBase64Validado);
                 }
             }else{
                 // si hubo recorte
@@ -423,8 +427,9 @@ window.onload = function(){
                 if (!hasAlphaValue) {
                     isBase64(image.src);
                     image = imageCompress(image);
+                    formatoBase64Validado = image.src;
                     formatoBase64 = image.src.substr(0,10);
-                    muestraProgressBar(formatoBase64);
+                    muestraProgressBar(formatoBase64, formatoBase64Validado);
                 }else {
                     // si tiene tranparencia
                     let srcFile = await srcToFile(image.src, 'new.png', 'image/png');
@@ -436,9 +441,9 @@ window.onload = function(){
                     reader.onloadend = function() {
                         base64Output = reader.result;
                         formatoBase64 = base64Output.substr(0,10);
-                        isBase64(base64Output);
-                        console.log('png2 ', base64Output);
-                        muestraProgressBar(formatoBase64);
+                        // isBase64(base64Output);
+                        formatoBase64Validado = isBase64(base64Output);
+                        muestraProgressBar(formatoBase64, formatoBase64Validado);
                     }
                 }
             }
@@ -683,18 +688,24 @@ window.onload = function(){
     /** 
      * Muestra progressbar after crop
      * @param {base64} formatoBase64 - image string base 64 form
+     * @param {base64} base64Format - tiene el formato validado
      */
-    function muestraProgressBar(formatoBase64){
+    function muestraProgressBar(formatoBase64, base64Format){
         if (formatoBase64 === 'data:image') {
             inputImage.style.display = 'none';
             actions.innerHTML = 
             // progress bar
-            `<fieldset>
-                <legend>subiendo</legend>
-                <div id="myProgress">
-                <div id="myBar"></div>
-                <div>
-            </fieldset>`;
+            "<fieldset>"+
+                "<legend>subiendo</legend>"+
+                "<div id='myProgress'>"+
+                	"<div id='myBar'></div>"+
+                "<div>"+
+            "</fieldset>"+
+			"<fieldset>"+
+				"<legend>Resultado</legend>"+
+				"<a id='downloadImage' href="+base64Format+" download='"+fileNameImage+"'>descargar imagen</a>"+
+			"</fieldset>"
+            ;
             progressMove();
         } else if (formatoBase64 === 'data:,') {
             btnSaveUpload.innerHTML = "uno más";
@@ -711,6 +722,7 @@ window.onload = function(){
              * enviar al servidor con axios
              */
             console.log(dataToServer);
+        	return dataToServer;
             axios.post('https://jsonplaceholder.typicode.com/posts',{
                 image: dataToServer,
             })
