@@ -721,8 +721,8 @@ window.onload = function(){
             /**
              * enviar al servidor con axios
              */
-            console.log(dataToServer);
-        	return dataToServer;
+            // console.log(dataToServer);
+        	// return dataToServer;
             axios.post('https://jsonplaceholder.typicode.com/posts',{
                 image: dataToServer,
             })

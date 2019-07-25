@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>cropper-compress</title>
+	<!-- styles -->
+	<!-- cropperjs -->
+	<link rel="stylesheet" href="pluggins/cropper.min.css">
+	<!-- cropper-compress -->
+	<link rel="stylesheet" href="css/cropper-compress.css">
+</head>
+<body>
+	<div class="container">
+		<h2 style="text-align: center; color: #1A73E8; font-family: Arial; font-size: 16px;">CROPPER-COMPRESS V1.0</h2>
+		<div id="containerImage">
+			<img id="source_image" crossorigin="anonymous" src="">
+			<img id="result_image" style="display: none;" crossorigin="anonymous" src="">
+		</div>
+		<form action="" id="imageInputForm">
+			<input type="file" id="inputImage" accept="image/*" />
+			<button id="btnGoBack">Regresar</button>
+			<div id="actions">
+
+				<fieldset class="docs-toggles">
+					<div class="d-block">
+						<legend>Tipo de recorte</legend>
+						<label>
+							<input type="radio" data-method="libre" name="clippingType">
+							<span>Libre</span>
+						</label>
+						<label>
+							<input type="radio" data-method="rectangle" name="clippingType">
+							<span>Rectangular</span>
+						</label>
+						<label>
+							<input type="radio" data-method="cuadrado" name="clippingType">
+							<span>Cuadrado</span>
+						</label>
+						<label>
+							<input type="radio" data-method="circle" name="clippingType">
+							<span>Circular</span>
+						</label>
+					</div>
+					<div class="d-block">
+				        <h5 class="d-inline">Alto</h5>
+				        <input type="number" id="dataHeight" min="1" max="2000" step="1" style="width: 60px;">
+						<p class="d-inline">px &nbsp;&nbsp;|</p>
+				        <h5 class="d-inline">&nbsp;Ancho</h5>
+				        <input type="number" id="dataWidth" min="1" max="2000" step="1" style="width: 60px;">
+				        <p class="d-inline">px</p>
+					</div>
+				</fieldset>
+
+				<fieldset class="docs-buttons">
+					<legend>Opciones</legend>
+					<button type="button" data-method="cancel" id="btnCancel">Cancelar</button>
+					<div style="float: right;">
+						<button type="submit" id="btnSaveUpload">Subir</button>
+					</div>
+				</fieldset>
+				
+				<fieldset class="docs-advanced">
+					<legend>Información de imagen</legend>
+					<label>
+						<input type="checkbox" id="activeAdvanced">
+						<span id="activeAdvancedMessage">Activar</span>
+					</label>
+				</fieldset>
+
+				<fieldset class="advanced d-none">
+			        <legend>Calidad de imagen</legend>
+			        <h5 class="d-inline">Calidad</h5>
+			        <input type="number" id="inputNumberCalidad" min="1" max="99" value="50" step="1" style="width: 60px;">
+			        <input type="range" id="inputRangeCalidad"  min="1" max="99" value="50">
+					
+					<br><br>
+
+					<div class="table">
+						<hr>
+						<h5 style="size: 15px; margin-top: 0; margin-bottom: 10px;">Opciones avanzadas</h5>
+						<table>
+							<thead>
+								<tr>
+									<th>Característica</th>
+									<th>Valor</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Peso inicial</td>
+									<td id="pesoInicial"></td>
+								</tr>
+								<tr>
+									<td>Peso final</td>
+									<td id="pesoFinal"></td>
+								</tr>
+								<tr>
+									<td>% Peso reducido</td>
+									<td id="quality"></td>
+								</tr>
+							</tbody>
+						</table>
+						<hr>
+					</div>
+				</fieldset>
+			</div>
+		</form>
+	</div>
+
+	<!-- scripts -->
+	<!-- cropper.js -->
+	<script src="pluggins/cropper.min.js"></script>
+	<!-- JIC.js -->
+	<script src="pluggins/JIC.min.js"></script>
+	<!-- browser-image-compression -->
+	<script src="pluggins/browser-image-compression.js"></script>
+	<!-- axios v0.19.0 -->
+	<script src="pluggins/axios.min.js"></script>
+	<!-- cropper-compress.js -->
+	<script src="js/cropper-compress.js"></script>
+</body>
+</html>
