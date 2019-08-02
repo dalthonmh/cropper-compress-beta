@@ -28,7 +28,7 @@ en navagador
 <script src="/path/to/cropper-compress.js"></script>
 ```
 ### Usage
-Selecciona una imagen y puedes directamente presionar el boton enviar, la imagen ya estará reducida en peso, cabe resaltar que estará en formato base 64.
+Seleccionas una imagen y esta ya estará con un peso reducido. Cuando accionas el boton enviar se envia en formato base 64.
 
 ### Options
 - **tipo de recorte**
@@ -45,4 +45,4 @@ Selecciona una imagen y puedes directamente presionar el boton enviar, la imagen
     - % Peso reducido: muestra el porcentaje de calidad de la imagen.
 
 ### Version
-1.0.0
+1.0.2
