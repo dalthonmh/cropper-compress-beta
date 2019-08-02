@@ -1,14 +1,15 @@
-/** 
- * CropperCompress v1.0.0
- * ----------------------
- * created: 02/05/2019
+/**
+ * Cropper-compress v1.0.2
  * https://gitlab.com/D4ITON/cropper-compress.git
- * licence: GNU General Public License v3.0.
+ *
+ * Copyright 2019, D4ITON
+ * GNU General Public License v3.0.
+ *
+ * Date: Tue May 02 13:13:03 2019 -0400
  */
 
 window.onload = function(){
     'use strict';
-
 
     /** Variables globales */
     var source_image = document.getElementById('source_image');
