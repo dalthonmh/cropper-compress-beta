@@ -8,14 +8,16 @@ Cropper-compress es una herramienta web de compresión y recorte de imágenes de
 - [JIC](https://github.com/brunobar79/J-I-C) - brunobar79
 - [cropperjs](https://github.com/fengyuanchen/cropperjs) - fengyuanchen
 - [browser-image-compression](https://github.com/Donaldcwl/browser-image-compression) - Donaldcwl
-## Features
+
+## Características
 - Reduce tamaño de imagen 
 - Recorte de imagen en forma:
     - libre
     - rectangular
     - cuadrado
     - circular
-## Getting started
+
+## Empezando
 
 ### Instalación
 
