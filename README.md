@@ -4,7 +4,7 @@
 
 Cropper-compress es una herramienta web de compresión y recorte de imágenes desde el lado del cliente.
 
-## Requirements or Dependencies
+## Requerimientos o Dependencias
 - [JIC](https://github.com/brunobar79/J-I-C) - brunobar79
 - [cropperjs](https://github.com/fengyuanchen/cropperjs) - fengyuanchen
 - [browser-image-compression](https://github.com/Donaldcwl/browser-image-compression) - Donaldcwl
@@ -17,7 +17,7 @@ Cropper-compress es una herramienta web de compresión y recorte de imágenes de
     - circular
 ## Getting started
 
-### Installation
+### Instalación
 
 ```sh
 $ git clone https://gitlab.com/D4ITON/cropper-compress
@@ -27,10 +27,10 @@ en navagador
 <link  href="/path/to/cropper-compress.css" rel="stylesheet">
 <script src="/path/to/cropper-compress.js"></script>
 ```
-### Usage
+### Uso
 Seleccionas una imagen y esta ya estará con un peso reducido. Cuando accionas el boton enviar se envia en formato base 64.
 
-### Options
+### Opciones
 - **tipo de recorte**
  Esta muestra las opciones de recorte disponibles.
 - **opciones** 
@@ -44,5 +44,5 @@ Seleccionas una imagen y esta ya estará con un peso reducido. Cuando accionas e
     - peso final: peso que se actualiza cuando se cambia la calidad de la imagen desde el parametro de entrada (input range o input text).
     - % Peso reducido: muestra el porcentaje de calidad de la imagen.
 
-### Version
+### Versión
 1.0.2
