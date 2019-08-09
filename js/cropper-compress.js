@@ -713,19 +713,33 @@ window.onload = function(){
         }
     }
 
+    function urltoFile(url, filename, mimeType){
+        return (fetch(url)
+            .then(function(res){return res.arrayBuffer();})
+            .then(function(buf){return new File([buf], filename, {type:mimeType});})
+        );
+    }
+
+
+
     /**
      * compara si es formato base64
      */
     function isBase64(dataToServer){
         let dataToServerString = dataToServer.substr(0,10);
+        var imageFile;
         if (dataToServerString === 'data:image') {
-            /**
-             * enviar al servidor con axios
-             */
-            // console.log(dataToServer);
-        	// return dataToServer;
+            
+            urltoFile(dataToServer, fileNameImage, uploadedImageType)
+            .then(function(file){
+                imageFile = file;
+                console.log(imageFile);
+            });
+            console.log(imageFile);
+
+            // return dataToServer;
             axios.post('https://jsonplaceholder.typicode.com/posts',{
-                image: dataToServer,
+                imageBase64: dataToServer,
             })
             .then((r) => console.log(r))
             .catch((e) => console.log(e));
