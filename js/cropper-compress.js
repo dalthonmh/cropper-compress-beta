@@ -732,17 +732,17 @@ window.onload = function(){
             
             urltoFile(dataToServer, fileNameImage, uploadedImageType)
             .then(function(file){
-                imageFile = file;
-                console.log(imageFile);
-            });
-            console.log(imageFile);
+                
+                // return dataToServer;
+                axios.post('https://jsonplaceholder.typicode.com/posts',{
+                    imageBase64: dataToServer,
+                    imageFile: file,
+                })
+                .then((r) => console.log(r))
+                .catch((e) => console.log(e));
 
-            // return dataToServer;
-            axios.post('https://jsonplaceholder.typicode.com/posts',{
-                imageBase64: dataToServer,
-            })
-            .then((r) => console.log(r))
-            .catch((e) => console.log(e));
+            });
+            
         }
     }
 
