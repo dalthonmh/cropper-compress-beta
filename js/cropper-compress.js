@@ -732,13 +732,13 @@ window.onload = function(){
             
             urltoFile(dataToServer, fileNameImage, uploadedImageType)
             .then(function(file){
-                
+                console.log(file);
                 // return dataToServer;
                 axios.post('https://jsonplaceholder.typicode.com/posts',{
                     imageBase64: dataToServer,
                     imageFile: file,
                 })
-                .then((r) => console.log(r))
+                .then((r) => console.log(r.data.imageFile))
                 .catch((e) => console.log(e));
 
             });
