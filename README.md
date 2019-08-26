@@ -10,41 +10,53 @@ Cropper-compress es una herramienta web de compresión y recorte de imágenes de
 - [browser-image-compression](https://github.com/Donaldcwl/browser-image-compression) - Donaldcwl
 
 ## Características
-- Reduce tamaño de imagen 
-- Recorte de imagen en forma:
-    - libre
-    - rectangular
-    - cuadrado
-    - circular
+- Reduce peso de imagen mediante input range o number
+- Muestra tamaño actual y despues de algun recorte de la imagen en pixeles
+- Recorte de imagen
+- Recortes recursivos de una misma imagen
 
 ## Empezando
 
 ### Instalación
-
+Primero instalar el paquete mediante:
 ```sh
 $ git clone https://gitlab.com/D4ITON/cropper-compress
 ```
-en navagador
+luego referenciar los archivos con los enlaces:
 ```sh
 <link  href="/path/to/cropper-compress.css" rel="stylesheet">
 <script src="/path/to/cropper-compress.js"></script>
 ```
-### Uso
-Seleccionas una imagen y esta ya estará con un peso reducido. Cuando accionas el boton enviar se envia en formato base 64.
 
-### Opciones
-- **tipo de recorte**
- Esta muestra las opciones de recorte disponibles.
-- **opciones** 
-    - Cancelar :  Se habilita cuando esta en modo recorte, cancela la previsualización del recorte
-    - Subir :  Sube directamente la imagen al servidor
-    - Cortar :  Hace el recorte de la imagen, esta solo se activa cuando un modo de recorte esté activo.
-- **información de imagen**
- Solo se muestra cuando una imagen esta en formato jpg, jpeg, o png pero si no tiene partes transparentes.
-    - calidad: muestra la calidad de imagen en porcenteaje del 1 al 99, donde si esta 1 porciento la imagen pesará menos pero a la vez tendrá una muy baja resolución, y visceversa.
-    - peso inicial: peso original de la imagen.
-    - peso final: peso que se actualiza cuando se cambia la calidad de la imagen desde el parametro de entrada (input range o input text).
-    - % Peso reducido: muestra el porcentaje de calidad de la imagen.
+### Funcionamiento
+Al cargar una imagen, automaticamente tendrá su peso reducido y se podrá ajustar mediante un slider la calidad. Luego de cambiar esta se podrá enviar a un servidor mediante axios.
+
+### Funcionalidades
+- **Tipo de recorte**
+ Muestra las opciones de recorte disponibles.
+  - Libre
+  - Rectangular
+  - Cuadrado
+  - Circular
+
+- **Dimensiones** 
+ Muestra el alto y ancho de la imagen, se actualiza cuando ya hay un recorte
+
+- **Opciones**
+     - Cancelar:  Se habilita cuando esta en modo recorte, cancela la previsualización del recorte
+     - Subir :  Sube directamente la imagen al servidor
+     - Cortar :  Hace el recorte de la imagen, esta solo se activa cuando un modo de recorte esté activo.
+
+    
+- **Información de imagen**
+ Botón que se activa para mostrar la calidad de la imagen
+
+     - Calidad: entero, valores 1 - 99
+     - Peso inicial: Muestra tamaño de la imagen cuando esta se carga
+     - Peso final: Valor que se actualiza cuando el se varía la calidad
+     - % Peso reducido: Porcentaje (100 * pesoFinal / pesoInicial)
+
+    > Nota: la calidad solo se podrá variar cuando la imagen no tenga partes transparentes
 
 ### Versión
-1.0.2
+1.0.4
