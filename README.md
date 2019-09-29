@@ -20,7 +20,7 @@ Cropper-compress es una herramienta web de compresión y recorte de imágenes de
 ### Instalación
 Primero instalar el paquete mediante:
 ```sh
-$ git clone https://gitlab.com/D4ITON/cropper-compress
+$ git clone hhttps://github.com/D4ITON/cropper-compress
 ```
 luego referenciar los archivos con los enlaces:
 ```sh
